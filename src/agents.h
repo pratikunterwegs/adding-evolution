@@ -22,6 +22,7 @@ public:
         const float paramSearchGammaA,
         const float paramSearchGammaB,
         const float paramSearchNormalSD,
+        const float range_perception,
         const float costMove,
         const int tSearch, 
         const float pSearchSlow, const float pSearchFast, const float pStrategy,
@@ -54,6 +55,7 @@ public:
         paramSearchGammaB(paramSearchGammaB),
         paramSearchNormalSD(paramSearchNormalSD),
 
+        range_perception(range_perception),
         costMove(costMove),
         
         // counters for handling and social metrics
@@ -98,6 +100,7 @@ public:
     const float paramSearchGammaB;
     const float paramSearchNormalSD;
 
+    const float range_perception;
     const float costMove;
 
     // counter and metrics
@@ -117,10 +120,13 @@ public:
     // network object
     Network pbsn;
 
+    // position rtree
+    bgi::rtree< value, bgi::quadratic<16> > agentRtree;
+
     /// functions for the population ///
     // population order, trait and position randomiser
     void shufflePop();
-    void setTrait (const float mSize);
+    void setTrait ();
     void initPos(Resources food);
 
     int countFood (const Resources &food, const float xloc, const float yloc);
@@ -147,6 +153,9 @@ public:
     );
     
     // counting proximity based interactions
+    // make rtree and get nearest agents and food
+    void updateRtree();
+    std::vector<int> getNeighbourId(const float xloc, const float yloc);
     void countAssoc(const int nThreads);
 
     // return population data
