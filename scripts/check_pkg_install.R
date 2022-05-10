@@ -10,26 +10,26 @@ library(ggplot2)
 # test case 0
 a = run_model(
   scenario = 0,
-  popsize = 100,
+  popsize = 250,
   nItems = 1800,
-  landsize = 60,
+  landsize = 200,
   nClusters = 100,
   clusterSpread = 1,
-  regen_time = 100,
-  tmax = 400,
+  regen_time = 10,
+  tmax = 100,
   genmax = 1,
   paramBallisticGammaA = 5.0,
   paramBallisticGammaB = 1.0,
-  paramBallisticNormalSD = 0.01,
-  paramSearchGammaA = 1.0,
+  paramBallisticKappa = 10.0,
+  paramSearchGammaA = 0.05,
   paramSearchGammaB = 1.0,
-  paramSearchNormalSD = 0.1,
+  paramSearchKappa = 0.1,
   range_perception = 1.0,
   costMove = 0.2,
   tSearch = 5,
   pSearchSlow = 0.8,
   pSearchFast = 0.2,
-  pStrategy = 0.5,
+  pStrategy = 0.8,
   nThreads = 1,
   dispersal = 3.0,
   mProb = 0.01,
@@ -47,7 +47,15 @@ ggplot(a@trait_data)+
     )
   )
 
-b = make_network(a, 2)
+b = make_network(a, 1)
 
-plot_network(b) +
+plot_network(b, pSearch) +
   scale_fill_viridis_c()
+
+# look at trait in relation to movement and intake
+ggplot(a@trait_data)+
+  geom_jitter(
+    aes(
+      moved, intake, col = pSearch
+    )
+  )
