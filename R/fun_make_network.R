@@ -42,10 +42,13 @@ make_network = function(object, weight_threshold) {
 #' Plot networks from data from `simulation_output` objects.
 #'
 #' @param g A `tidygraph` object.
-#' 
+#' @param colour_by A variable name, _not_ as a string.
 #' @return A `ggplot` object.
 #' @export
-plot_network = function(g) {
+plot_network = function(g, colour_by) {
+
+    colour_by = rlang::enquo(colour_by)
+
     ggraph::ggraph(
         g, x = xn, y = yn
     ) +
@@ -59,14 +62,10 @@ plot_network = function(g) {
     )+
     ggraph::geom_node_point(
         ggplot2::aes(
-          fill = assoc,
+          fill = !!colour_by,
           size = assoc
         ),
-        shape = 21,
-        show.legend = F
-    )+
-    ggplot2::scale_colour_distiller(
-        palette = "Greys"
+        shape = 21
     )+
     ggplot2::scale_size_continuous(
         range = c(0.5, 5)
