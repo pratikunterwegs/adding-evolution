@@ -15,7 +15,8 @@ LinkingTo:
     Rcpp,
     RcppParallel,
     BH,
-    testthat
+    testthat,
+    RcppGSL
 Imports: 
     Rcpp,
     RcppParallel,
@@ -23,7 +24,8 @@ Imports:
     assertthat,
     data.table,
     glue,
-    ggplot2
+    ggplot2,
+    RcppGSL
 Suggests: 
     testthat (>= 3.0.0),
     ssh,
