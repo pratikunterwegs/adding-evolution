@@ -340,16 +340,11 @@ S4 run_model(const int scenario,
         scenario_str = std::string("ecological");
         // do the simulation using the simulation class function                        
         simOutput = this_sim.do_simulation_eco();
-    } 
-    // else if(scenario == 2) {
-    //     scenario_str = std::string("evolved movement");
-    //     // do the simulation using the simulation class function                        
-    //     simOutput = this_sim.do_simulation_mechanistic();
-    // } else if(scenario == 1) {
-    //     scenario_str = std::string("optimal movement");
-    //     // do the simulation using the simulation class function                        
-    //     simOutput = this_sim.do_simulation_optimal();
-    // }
+    } else if(scenario == 1) {
+        scenario_str = std::string("evolutionary movement");
+        // do the simulation using the simulation class function                        
+        simOutput = this_sim.do_simulation_evo();
+    }
 
     // parameter list
     Rcpp::List param_list = Rcpp::List::create(
