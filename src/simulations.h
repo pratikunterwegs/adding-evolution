@@ -83,6 +83,7 @@ public:
 
     // funs
     Rcpp::List do_simulation_eco();
+    Rcpp::List do_simulation_evo();
 
 };
 
