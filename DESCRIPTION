@@ -23,7 +23,8 @@ Imports:
     assertthat,
     data.table,
     glue,
-    ggplot2
+    ggplot2,
+    rlang
 Suggests: 
     testthat (>= 3.0.0),
     ssh,
