@@ -28,18 +28,18 @@ get_test_landscape <- function(nItems, landsize, nClusters, clusterSpread, regen
 #' @param regen_time The item regeneration time.
 #' @param tmax The number of timesteps per generation.
 #' @param genmax The maximum number of generations per simulation.
-#' @param ballisticGammaA Alpha parameter for a step length distribution
+#' @param paramBallisticGammaA Alpha parameter for a step length distribution
 #' used to draw steps for agent ballistic movement.
-#' @param ballisticGammaB Beta parameter for a step length distribution
+#' @param paramBallisticGammaB Beta parameter for a step length distribution
 #' used to draw steps for agent ballistic movement.
-#' @param ballisticAngle Standard deviation of a normal distribution from
+#' @param paramBallisticKappa Concentration parameter of a von Mises distribution from
 #' which turning angles are drawn in radians, for ballistic movement.
 #' Should be smaller than `searchAngle`.
-#' @param searchGammaA Alpha parameter for a step length distribution
+#' @param paramSearchGammaA Alpha parameter for a step length distribution
 #' used to draw steps for agent searching movement.
-#' @param searchGammaB Beta parameter for a step length distribution
+#' @param paramSearchGammaB Beta parameter for a step length distribution
 #' used to draw steps for agent searching movement.
-#' @param searchAngle Standard deviation of a normal distribution from
+#' @param paramSearchKappa Concentration parameter of a von Mises distribution from
 #' which turning angles are drawn in radians, for searching movement.
 #' Should be greater than `ballisticAngle`.
 #' @param range_perception The range at which agents detect items.
@@ -64,7 +64,7 @@ get_test_landscape <- function(nItems, landsize, nClusters, clusterSpread, regen
 #' @param mSize Controls the mutational step size, and represents the scale
 #' parameter of a Cauchy distribution. 
 #' @return An S4 class, `simulation_output`, with simulation outcomes.
-run_model <- function(scenario, popsize, nItems, landsize, nClusters, clusterSpread, regen_time, tmax, genmax, paramBallisticGammaA, paramBallisticGammaB, paramBallisticNormalSD, paramSearchGammaA, paramSearchGammaB, paramSearchNormalSD, range_perception, costMove, tSearch, pSearchSlow, pSearchFast, pStrategy, nThreads, dispersal, mProb, mSize) {
-    .Call(`_ecoevomove1_run_model`, scenario, popsize, nItems, landsize, nClusters, clusterSpread, regen_time, tmax, genmax, paramBallisticGammaA, paramBallisticGammaB, paramBallisticNormalSD, paramSearchGammaA, paramSearchGammaB, paramSearchNormalSD, range_perception, costMove, tSearch, pSearchSlow, pSearchFast, pStrategy, nThreads, dispersal, mProb, mSize)
+run_model <- function(scenario, popsize, nItems, landsize, nClusters, clusterSpread, regen_time, tmax, genmax, paramBallisticGammaA, paramBallisticGammaB, paramBallisticKappa, paramSearchGammaA, paramSearchGammaB, paramSearchKappa, range_perception, costMove, tSearch, pSearchSlow, pSearchFast, pStrategy, nThreads, dispersal, mProb, mSize) {
+    .Call(`_ecoevomove1_run_model`, scenario, popsize, nItems, landsize, nClusters, clusterSpread, regen_time, tmax, genmax, paramBallisticGammaA, paramBallisticGammaB, paramBallisticKappa, paramSearchGammaA, paramSearchGammaB, paramSearchKappa, range_perception, costMove, tSearch, pSearchSlow, pSearchFast, pStrategy, nThreads, dispersal, mProb, mSize)
 }
 
