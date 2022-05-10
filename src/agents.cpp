@@ -7,10 +7,6 @@
 #include <random>
 
 #include <boost/foreach.hpp>
-#include <RcppGSL.h>
-
-#include <gsl/gsl_rng.h>
-#include <gsl/gsl_randist.h>
 
 #include <Rcpp.h>
 #include <RcppParallel.h>
@@ -19,9 +15,8 @@
 #include "landscape.h"
 #include "agents.h"
 
-/// random number generator
-std::mt19937 rng;
-gsl_rng *r = gsl_rng_alloc(gsl_rng_mt19937);
+/// random number generator for GSL
+// gsl_rng *r = gsl_rng_alloc(gsl_rng_mt19937);
 
 // to shuffle pop id
 void Population::shufflePop() {
@@ -83,27 +78,6 @@ void Population::setTrait() {
 
 float get_distance(float x1, float x2, float y1, float y2) {
     return std::sqrt(std::pow((x1 - x2), 2) + std::pow((y1 - y2), 2));
-}
-
-// general function for agents within distance
-int Population::countAgents (
-    const float xloc, const float yloc) {
-    
-    int ag = 0;
-    std::vector<value> near_agents;
-    // query for a simple box
-    agentRtree.query(bgi::satisfies([&](value const& v) {
-        return bg::distance(v.first, point(xloc, yloc)) < range_perception;}),
-        std::back_inserter(near_agents));
-
-    BOOST_FOREACH(value const& v, near_agents) {
-        
-        ag++;
-    }
-    near_agents.clear();
-    // first element is number of near entities
-    // second is the identity of entities
-    return ag;
 }
 
 // function for near agent ids
@@ -201,8 +175,7 @@ float wrapLoc(float l, float maxl) {
 // function to move after drawing step lengths from a distribution
 // and also turning angles
 void Population::move_random(const Resources &food) {
-    float twopi = 2.f * M_PI;
-
+    
     // set up distributions
     std::gamma_distribution<float> distanceBallistic (paramBallisticGammaA, paramBallisticGammaB);
     std::normal_distribution<float> angleBallistic (0.f, paramBallisticNormalSD);
@@ -224,8 +197,8 @@ void Population::move_random(const Resources &food) {
             coordX[i] = coordX[i] + (distance * t1_);
             coordY[i] = coordY[i] + (distance * t2_);
 
-            coordX[i] = wrapLoc(coordX[i]);
-            coordY[i] = wrapLoc(coordY[i]);
+            coordX[i] = wrapLoc(coordX[i], food.dSize);
+            coordY[i] = wrapLoc(coordY[i], food.dSize);
 
             // movement and cost of movement
             moved[i] += distance;
@@ -245,8 +218,8 @@ void Population::move_random(const Resources &food) {
             coordX[i] = coordX[i] + (distance * t1_);
             coordY[i] = coordY[i] + (distance * t2_);
 
-            coordX[i] = wrapLoc(coordX[i]);
-            coordY[i] = wrapLoc(coordY[i]);
+            coordX[i] = wrapLoc(coordX[i], food.dSize);
+            coordY[i] = wrapLoc(coordY[i], food.dSize);
             
             // movement and cost of movement
             moved[i] += distance;
@@ -329,8 +302,10 @@ void Population::doForage(Resources &food) {
             {
                 intake[id] += 1.0; // increased here --- not as described --- okay for now.
                 energy[id] += 1.0;
+
+                std::bernoulli_distribution bSearch(pSearch[i]);
                 // individuals have some probability of shifting to Search
-                if(gsl_ran_bernoulli(r, pSearch[i]) == 1) {
+                if(bSearch(rng)) {
                     counter[id] = tSearch;
                 }
 
@@ -420,8 +395,8 @@ void Population::Reproduce(const Resources food,
         coord_y_2[a] = coordY[parent_id] + sprout(rng);
 
         // robustly wrap positions
-        coord_x_2[a] = wrapLoc(coord_x_2, food.dSize);
-        coord_y_2[a] = wrapLoc(coord_y_2, food.dSize);
+        coord_x_2[a] = wrapLoc(coord_x_2[a], food.dSize);
+        coord_y_2[a] = wrapLoc(coord_y_2[a], food.dSize);
     }
 
     // swap coords --- this initialises individuals near their parent's position
@@ -443,8 +418,8 @@ void Population::Reproduce(const Resources food,
         if(mutation_happens(rng)) {
             tmp_pSearch[a] = tmp_pSearch[a] + mutation_size(rng);
             
-            if(tmp_pSearch[a] < 0.f) tmp_pSearch = 0.00001f;
-            if(tmp_pSearch[a] > 1.f) tmp_pSearch = 0.99f;
+            if(tmp_pSearch[a] < 0.f) tmp_pSearch[a] = 0.00001f;
+            if(tmp_pSearch[a] > 1.f) tmp_pSearch[a] = 0.99f;
         }
     }
     
