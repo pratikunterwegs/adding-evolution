@@ -54,7 +54,7 @@ plot_network = function(g, colour_by) {
     ) +
     ggraph::geom_edge_fan(
         edge_width = 0.5,
-        edge_colour = "grey40",
+        edge_colour = "grey70",
         ggplot2::aes(
             edge_alpha = weight
         ),
@@ -72,5 +72,6 @@ plot_network = function(g, colour_by) {
     )+
     ggraph::scale_edge_alpha(
         range = c(0.3, 1)
-    )
+    )+
+    ggplot2::theme_test()
 }
