@@ -136,7 +136,7 @@ Rcpp::List simulation::do_simulation_eco() {
         // movement section
         pop.move_random(food);
 
-        // mdPre.updateMoveData(pop, t);
+        md.updateMoveData(pop, t);
 
         // foraging -- split into parallelised picking
         // and non-parallel exploitation
@@ -156,8 +156,8 @@ Rcpp::List simulation::do_simulation_eco() {
 
     return Rcpp::List::create(
         Named("gen_data") = pop.returnPopData(),
-        Named("edge_list") = edgeList
-        // Named("move_data") = mdPre.getMoveData()
+        Named("edge_list") = edgeList,
+        Named("move_data") = md.getMoveData()
     );
 }
 
@@ -290,6 +290,7 @@ S4 run_model(const int scenario,
     x.slot("parameters") = Rcpp::wrap(param_list);
     x.slot("trait_data") = Rcpp::wrap(simOutput["gen_data"]);
     x.slot("edge_list") = Rcpp::wrap(simOutput["edge_list"]);
+    x.slot("move_data") = Rcpp::wrap(simOutput["move_data"]);
 
     return(x);
 }

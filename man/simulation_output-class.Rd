@@ -15,5 +15,7 @@ Defines the \code{simulation_output} class.
 \item{\code{trait_data}}{data.frame.}
 
 \item{\code{edge_list}}{data.frame.}
+
+\item{\code{move_data}}{list.}
 }}
 

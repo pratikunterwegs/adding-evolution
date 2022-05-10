@@ -60,10 +60,10 @@ public:
         dispersal(dispersal),
         // mutation probability and step size
         mProb(mProb),
-        mSize(mSize)
+        mSize(mSize),
 
         // movement data
-        // mdPre(tmax, popsize),
+        md(tmax, popsize)
         // mdPost(tmax, popsize)
     {}
     ~simulation() {}
@@ -79,7 +79,7 @@ public:
     
     const float mProb, mSize;
 
-    // moveData mdPre, mdPost;
+    moveData md;
 
     // funs
     Rcpp::List do_simulation_eco();

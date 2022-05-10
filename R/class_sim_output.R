@@ -25,6 +25,7 @@ check_simulation_output <- function(object) {
 #' @slot parameters list.
 #' @slot trait_data data.frame.
 #' @slot edge_list data.frame.
+#' @slot move_data list.
 #'
 #' @export
 setClass(
@@ -35,14 +36,16 @@ setClass(
   slots = c(
     parameters = "list",
     trait_data = "data.frame",
-    edge_list = "data.frame"
+    edge_list = "data.frame",
+    move_data = "list"
   ),
 
   # define the default values of the slots
   prototype = list(
     parameters = list(),
     trait_data = data.frame(),
-    edge_list = data.frame()
+    edge_list = data.frame(),
+    move_data = list()
   ),
 
   # check validity of class
