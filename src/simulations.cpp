@@ -153,22 +153,20 @@ Rcpp::List simulation::do_simulation_evo() {
             pop.countAssoc(nThreads);
             // timestep ends here
         }
-
+        
         // log data in the last generation
         if (gen == (genmax - 1)) {
             pop_trait_data = pop.returnPopData();
             edgeList = pop.pbsn.getNtwkDf();
         }
 
+        // reproduce
+        pop.Reproduce(food, dispersal, mProb, mSize);
+        // generation ends here
+
     }
-
-    // generation ends here
-    Rcpp::Rcout << "gen: " << (genmax - 1) << " --- logged edgelist\n";
-    Rcpp::Rcout << "data prepared\n";
-
     edgeList = pop.pbsn.getNtwkDf();
-
-    Rcpp::Rcout << "gen: " << 1 << " --- logged edgelist\n";
+    Rcpp::Rcout << "gen: " << (genmax - 1) << " --- logged edgelist\n";
     Rcpp::Rcout << "data prepared\n";
 
     return Rcpp::List::create(
