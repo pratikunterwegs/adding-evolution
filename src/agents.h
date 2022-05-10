@@ -19,12 +19,12 @@ public:
         const float paramBallisticGammaA,
         const float paramBallisticGammaB,
         const float paramBallisticNormalSD,
-        const float paramArsGammaA,
-        const float paramArsGammaB,
-        const float paramArsNormalSD,
+        const float paramSearchGammaA,
+        const float paramSearchGammaB,
+        const float paramSearchNormalSD,
         const float costMove,
-        const int tArs, 
-        const float pArsSlow, const float pArsFast, const float pStrategy,
+        const int tSearch, 
+        const float pSearchSlow, const float pSearchFast, const float pStrategy,
         const int scenario
     ) :
         // agents, positions, energy and traits
@@ -35,12 +35,12 @@ public:
         initY (popsize, 0.0f),
         intake (popsize, 0.001f),
         energy (popsize, 0.001f),
-        pArs (popsize, 0.5f),
+        pSearch (popsize, 0.5f),
 
         // probabilities for the strategy switch and the prop
         // of individuals in each strategy for ecological sims
-        pArsSlow(pArsSlow),
-        pArsFast(pArsFast),
+        pSearchSlow(pSearchSlow),
+        pSearchFast(pSearchFast),
         pStrategy(pStrategy),
 
         // parameters for the two kinds of random walk
@@ -50,9 +50,9 @@ public:
         paramBallisticNormalSD(paramBallisticNormalSD),
 
         // for area restricted search
-        paramArsGammaA(paramArsGammaA),
-        paramArsGammaB(paramArsGammaB),
-        paramArsNormalSD(paramArsNormalSD),
+        paramSearchGammaA(paramSearchGammaA),
+        paramSearchGammaB(paramSearchGammaB),
+        paramSearchNormalSD(paramSearchNormalSD),
 
         costMove(costMove),
         
@@ -61,7 +61,7 @@ public:
         associations(popsize, 0),
 
         // agent sensory parameters
-        tArs(tArs),
+        tSearch(tSearch),
 
         // vectors for agent order
         order(popsize, 1),
@@ -84,19 +84,19 @@ public:
     std::vector<float> intake;
     std::vector<float> energy;
     // prob shifting to area restricted search
-    std::vector<float> pArs;
+    std::vector<float> pSearch;
 
-    const float pArsSlow;
-    const float pArsFast;
+    const float pSearchSlow;
+    const float pSearchFast;
     const float pStrategy;
 
     const float paramBallisticGammaA;
     const float paramBallisticGammaB;
     const float paramBallisticNormalSD;
 
-    const float paramArsGammaA;
-    const float paramArsGammaB;
-    const float paramArsNormalSD;
+    const float paramSearchGammaA;
+    const float paramSearchGammaB;
+    const float paramSearchNormalSD;
 
     const float costMove;
 
@@ -105,7 +105,7 @@ public:
     std::vector<int> associations; // number of total interactions
 
     // this is now actually the time for area restricted search
-    const int tArs;
+    const int tSearch;
 
     // shuffle vector and transmission
     std::vector<int> order;

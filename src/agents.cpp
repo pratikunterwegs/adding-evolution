@@ -74,9 +74,9 @@ void Population::setTrait() {
 
     for(int i = 0; i < nAgents; i++) {
         if(fastOrSlow(rng)) {
-            pArs[i] = pArsFast;
+            pSearch[i] = pSearchFast;
         } else {
-            pArs[i] = pArsSlow;
+            pSearch[i] = pSearchSlow;
         }
     }
 }
@@ -207,16 +207,16 @@ void Population::move_random(const Resources &food) {
     std::gamma_distribution<float> distanceBallistic (paramBallisticGammaA, paramBallisticGammaB);
     std::normal_distribution<float> angleBallistic (0.f, paramBallisticNormalSD);
 
-    std::gamma_distribution<float> distanceArs (paramArsGammaA, paramArsGammaB);
-    std::normal_distribution<float> angleArs (0.f, paramArsNormalSD);
+    std::gamma_distribution<float> distanceSearch (paramSearchGammaA, paramSearchGammaB);
+    std::normal_distribution<float> angleSearch (0.f, paramSearchNormalSD);
     
     for (int i = 0; i < nAgents; ++i) {
         // check if locked into search mode
         if (counter[i] > 0) {
 
             // agent is searching and moves with brownian motion
-            float distance = distanceArs(rng);
-            float angle = angleArs(rng);
+            float distance = distanceSearch(rng);
+            float angle = angleSearch(rng);
 
             float t1_ = static_cast<float>(cos(angle));
             float t2_ = static_cast<float>(sin(angle));
@@ -329,9 +329,9 @@ void Population::doForage(Resources &food) {
             {
                 intake[id] += 1.0; // increased here --- not as described --- okay for now.
                 energy[id] += 1.0;
-                // individuals have some probability of shifting to ars
-                if(gsl_ran_bernoulli(r, pArs[i]) == 1) {
-                    counter[id] = tArs;
+                // individuals have some probability of shifting to Search
+                if(gsl_ran_bernoulli(r, pSearch[i]) == 1) {
+                    counter[id] = tSearch;
                 }
 
                 // reset food availability
@@ -395,7 +395,7 @@ void Population::Reproduce(const Resources food,
     std::discrete_distribution<> weightedLottery(vecFitness.begin(), vecFitness.end());
 
     // get parent trait based on weighted lottery
-    std::vector<float> tmp_pArs (nAgents, 0.5f);
+    std::vector<float> tmp_pSearch (nAgents, 0.5f);
     
     // reset associations
     associations = std::vector<int> (nAgents, 0);
@@ -413,7 +413,7 @@ void Population::Reproduce(const Resources food,
     for (int a = 0; a < nAgents; a++) {
         size_t parent_id = static_cast<size_t>(weightedLottery(rng));
 
-        tmp_pArs[a] = pArs[parent_id];
+        tmp_pSearch[a] = pSearch[parent_id];
 
         // inherit positions from parent
         coord_x_2[a] = coordX[parent_id] + sprout(rng);
@@ -441,17 +441,17 @@ void Population::Reproduce(const Resources food,
     // trait mutation prob is mProb, in a two step process
     for (int a = 0; a < nAgents; a++) {
         if(mutation_happens(rng)) {
-            tmp_pArs[a] = tmp_pArs[a] + mutation_size(rng);
+            tmp_pSearch[a] = tmp_pSearch[a] + mutation_size(rng);
             
-            if(tmp_pArs[a] < 0.f) tmp_pArs = 0.00001f;
-            if(tmp_pArs[a] > 1.f) tmp_pArs = 0.99f;
+            if(tmp_pSearch[a] < 0.f) tmp_pSearch = 0.00001f;
+            if(tmp_pSearch[a] > 1.f) tmp_pSearch = 0.99f;
         }
     }
     
     // swap trait matrices
-    std::swap(pArs, tmp_pArs);
+    std::swap(pSearch, tmp_pSearch);
 
-    tmp_pArs.clear();
+    tmp_pSearch.clear();
     
     // swap energy
     std::vector<float> tmpEnergy (nAgents, 0.001f);
