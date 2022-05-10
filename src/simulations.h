@@ -16,14 +16,14 @@ public:
                 const int regen_time,
                 const int tmax,
                 const int genmax,
-                const float range_perception,
                 const float paramBallisticGammaA,
                 const float paramBallisticGammaB,
                 const float paramBallisticNormalSD,
                 const float paramSearchGammaA,
                 const float paramSearchGammaB,
                 const float paramSearchNormalSD,
-                const float costMove
+                const float range_perception,
+                const float costMove,
                 const int tSearch,
                 const float pSearchSlow,
                 const float pSearchFast,
@@ -36,6 +36,7 @@ public:
         pop (popsize, paramBallisticGammaA, paramBallisticGammaB,
             paramBallisticNormalSD, paramSearchGammaA,
             paramSearchGammaB, paramSearchNormalSD,
+            range_perception,
             costMove, tSearch,
             pSearchSlow, pSearchFast, pStrategy,
             scenario
@@ -59,7 +60,7 @@ public:
         dispersal(dispersal),
         // mutation probability and step size
         mProb(mProb),
-        mSize(mSize),
+        mSize(mSize)
 
         // movement data
         // mdPre(tmax, popsize),
@@ -78,7 +79,7 @@ public:
     
     const float mProb, mSize;
 
-    moveData mdPre, mdPost;
+    // moveData mdPre, mdPost;
 
     // funs
     Rcpp::List do_simulation_eco();
