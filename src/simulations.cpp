@@ -165,12 +165,11 @@ Rcpp::List simulation::do_simulation_evo() {
         // generation ends here
 
     }
-    edgeList = pop.pbsn.getNtwkDf();
     Rcpp::Rcout << "gen: " << (genmax - 1) << " --- logged edgelist\n";
     Rcpp::Rcout << "data prepared\n";
 
     return Rcpp::List::create(
-        Named("gen_data") = pop.returnPopData(),
+        Named("gen_data") = pop_trait_data,
         Named("edge_list") = edgeList,
         Named("move_data") = md.getMoveData()
     );
