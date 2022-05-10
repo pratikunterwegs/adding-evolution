@@ -1,0 +1,2 @@
+CXXSTD = -std=c++14
+PKG_LIBS += $(shell ${R_HOME}/bin/Rscript -e "RcppParallel::RcppParallelLibs()")
