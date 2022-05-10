@@ -4,10 +4,12 @@
 \alias{plot_network}
 \title{Plot networks from data from \code{simulation_output} objects.}
 \usage{
-plot_network(g)
+plot_network(g, colour_by)
 }
 \arguments{
 \item{g}{A \code{tidygraph} object.}
+
+\item{colour_by}{A variable name, \emph{not} as a string.}
 }
 \value{
 A \code{ggplot} object.
