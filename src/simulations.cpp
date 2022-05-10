@@ -8,94 +8,94 @@
 
 using namespace Rcpp;
 
-Rcpp::List simulation::do_simulation_evo() {
+// Rcpp::List simulation::do_simulation_evo() {
 
-    unsigned seed = static_cast<unsigned> (std::chrono::system_clock::now().time_since_epoch().count());
-    rng.seed(seed);
+//     unsigned seed = static_cast<unsigned> (std::chrono::system_clock::now().time_since_epoch().count());
+//     rng.seed(seed);
     
-    // prepare landscape and pop
-    food.initResources();
-    food.countAvailable();
-    Rcpp::Rcout << "landscape with " << food.nClusters << " clusters\n";
+//     // prepare landscape and pop
+//     food.initResources();
+//     food.countAvailable();
+//     Rcpp::Rcout << "landscape with " << food.nClusters << " clusters\n";
 
-    pop.setTrait(mSize);
-    Rcpp::Rcout << "pop with " << pop.nAgents << " agents for " << genmax << " gens " << tmax << " timesteps\n";
+//     pop.setTrait(mSize);
+//     Rcpp::Rcout << "pop with " << pop.nAgents << " agents for " << genmax << " gens " << tmax << " timesteps\n";
 
-    // prepare scenario
-    Rcpp::Rcout << "this is scenario " << scenario << ": evolved movement\n";
+//     // prepare scenario
+//     Rcpp::Rcout << "this is scenario " << scenario << ": evolved movement\n";
 
-    // agent random position in first gen
-    pop.initPos(food);
-    // Rcpp::Rcout << "initialised population positions\n";
+//     // agent random position in first gen
+//     pop.initPos(food);
+//     // Rcpp::Rcout << "initialised population positions\n";
     
-    Rcpp::DataFrame edgeList;
-    Rcpp::DataFrame pop_trait_data;
-    // Rcpp::Rcout << "created edge list object\n";
+//     Rcpp::DataFrame edgeList;
+//     Rcpp::DataFrame pop_trait_data;
+//     // Rcpp::Rcout << "created edge list object\n";
 
-    // go over gens
-    for(int gen = 0; gen < genmax; gen++) {
+//     // go over gens
+//     for(int gen = 0; gen < genmax; gen++) {
 
-        food.countAvailable();
-        // Rcpp::Rcout << "food available = " << food.nAvailable << "\n";
+//         food.countAvailable();
+//         // Rcpp::Rcout << "food available = " << food.nAvailable << "\n";
 
-        // reset counter and positions
-        pop.counter = std::vector<int> (pop.nAgents, 0);
+//         // reset counter and positions
+//         pop.counter = std::vector<int> (pop.nAgents, 0);
         
-        // Rcpp::Rcout << "entering ecological timescale\n";
+//         // Rcpp::Rcout << "entering ecological timescale\n";
 
-        // timesteps start here
-        for (size_t t = 0; t < static_cast<size_t>(tmax); t++)
-        {
-            // resources regrow
-            food.regenerate();
-            // Rcpp::Rcout << "food regenerated\n";
-            pop.updateRtree();
-            // Rcpp::Rcout << "updated r tree\n";
-            // movement section
-            pop.move_mechanistic(food, nThreads);
-            // Rcpp::Rcout << "moved\n";
+//         // timesteps start here
+//         for (size_t t = 0; t < static_cast<size_t>(tmax); t++)
+//         {
+//             // resources regrow
+//             food.regenerate();
+//             // Rcpp::Rcout << "food regenerated\n";
+//             pop.updateRtree();
+//             // Rcpp::Rcout << "updated r tree\n";
+//             // movement section
+//             pop.move_mechanistic(food, nThreads);
+//             // Rcpp::Rcout << "moved\n";
 
-            // if(gen == (genmax - 1)) {
-            //     mdPost.updateMoveData(pop, t);
-            // }
-            // Rcpp::Rcout << "logged movement data\n";
+//             // if(gen == (genmax - 1)) {
+//             //     mdPost.updateMoveData(pop, t);
+//             // }
+//             // Rcpp::Rcout << "logged movement data\n";
 
-            // foraging -- split into parallelised picking
-            // and non-parallel exploitation
-            pop.pickForageItem(food, nThreads);
-            pop.doForage(food);
+//             // foraging -- split into parallelised picking
+//             // and non-parallel exploitation
+//             pop.pickForageItem(food, nThreads);
+//             pop.doForage(food);
 
-            // count associations --- only in last gen
-            if(gen == (genmax - 1)) {
-                pop.countAssoc(nThreads);
-            }
-            // timestep ends here
-        }
+//             // count associations --- only in last gen
+//             if(gen == (genmax - 1)) {
+//                 pop.countAssoc(nThreads);
+//             }
+//             // timestep ends here
+//         }
         
-        pop.energy = pop.intake;
+//         pop.energy = pop.intake;
 
-        // log data in the last generation
-        if (gen == (genmax - 1)) {
-            pop_trait_data = pop.returnPopData();
-            edgeList = pop.pbsn.getNtwkDf();
-        }
+//         // log data in the last generation
+//         if (gen == (genmax - 1)) {
+//             pop_trait_data = pop.returnPopData();
+//             edgeList = pop.pbsn.getNtwkDf();
+//         }
 
-        // reproduce
-        pop.Reproduce(food, dispersal, mProb, mSize);
+//         // reproduce
+//         pop.Reproduce(food, dispersal, mProb, mSize);
 
-        // generation ends here
-    }
-    // all gens end here
+//         // generation ends here
+//     }
+//     // all gens end here
 
-    Rcpp::Rcout << "gen: " << genmax << " --- logged edgelist\n";
-    Rcpp::Rcout << "data prepared\n";
+//     Rcpp::Rcout << "gen: " << genmax << " --- logged edgelist\n";
+//     Rcpp::Rcout << "data prepared\n";
 
-    return Rcpp::List::create(
-        Named("gen_data") = pop_trait_data,
-        Named("edge_list") = edgeList
-        // Named("move_post") = mdPost.getMoveData()
-    );
-}
+//     return Rcpp::List::create(
+//         Named("gen_data") = pop_trait_data,
+//         Named("edge_list") = edgeList
+//         // Named("move_post") = mdPost.getMoveData()
+//     );
+// }
 
 /// simulation for random movement
 Rcpp::List simulation::do_simulation_eco() {
@@ -107,7 +107,7 @@ Rcpp::List simulation::do_simulation_eco() {
     food.countAvailable();
     Rcpp::Rcout << "landscape with " << food.nClusters << " clusters\n";
 
-    pop.setTrait(mSize);
+    pop.setTrait();
     Rcpp::Rcout << "pop with " << pop.nAgents << " agents for " << genmax << " gens " << tmax << " timesteps\n";
 
     // prepare scenario
@@ -176,7 +176,6 @@ Rcpp::List simulation::do_simulation_eco() {
 //' @param regen_time The item regeneration time.
 //' @param tmax The number of timesteps per generation.
 //' @param genmax The maximum number of generations per simulation.
-//' @param range_perception The sensory range for agents.
 //' @param ballisticGammaA Alpha parameter for a step length distribution
 //' used to draw steps for agent ballistic movement.
 //' @param ballisticGammaB Beta parameter for a step length distribution
@@ -191,6 +190,7 @@ Rcpp::List simulation::do_simulation_eco() {
 //' @param searchAngle Standard deviation of a normal distribution from
 //' which turning angles are drawn in radians, for searching movement.
 //' Should be greater than `ballisticAngle`.
+//' @param range_perception The range at which agents detect items.
 //' @param costMove The energetic cost per distance moved.
 //' @param tSearch The duration of area restricted search; this is fixed, while
 //' the probability of switching to this mode varies.
@@ -222,14 +222,14 @@ S4 run_model(const int scenario,
                 const int regen_time,
                 const int tmax,
                 const int genmax,
-                const float range_perception,
                 const float paramBallisticGammaA,
                 const float paramBallisticGammaB,
                 const float paramBallisticNormalSD,
                 const float paramSearchGammaA,
                 const float paramSearchGammaB,
                 const float paramSearchNormalSD,
-                const float costMove
+                const float range_perception,
+                const float costMove,
                 const int tSearch,
                 const float pSearchSlow,
                 const float pSearchFast,
@@ -240,11 +240,16 @@ S4 run_model(const int scenario,
                 const float mSize) {
 
     // make simulation class with input parameters                            
-    simulation this_sim(popsize, scenario, nItems,
-        landsize, nClusters, clusterSpread, tmax,
-        genmax, range_perception, tSearch,
-        pSearchSlow, pSearchFast,
-        regen_time, nThreads, dispersal,
+    simulation this_sim(scenario, popsize, nItems,
+        landsize, nClusters, clusterSpread, regen_time, tmax,
+        genmax, 
+        paramBallisticGammaA, paramBallisticGammaB,
+        paramBallisticNormalSD,
+        paramSearchGammaA, paramSearchGammaB,
+        paramSearchNormalSD,
+        range_perception, costMove, tSearch,
+        pSearchSlow, pSearchFast, pStrategy,
+        nThreads, dispersal,
         mProb, mSize
     );
 
@@ -276,7 +281,7 @@ S4 run_model(const int scenario,
             Named("item_density") = static_cast<float>(nItems) / landsize,
             Named("pSearchSlow") = pSearchSlow,
             Named("pSearchFast") = pSearchFast,
-            Names("pStrategy") = pStrategy,
+            Named("pStrategy") = pStrategy,
             Named("dispersal") = dispersal
         );
 
