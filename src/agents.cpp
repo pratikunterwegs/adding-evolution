@@ -14,6 +14,7 @@
 #include "network.h"
 #include "landscape.h"
 #include "agents.h"
+#include "vonmises.h"
 
 /// random number generator for GSL
 // gsl_rng *r = gsl_rng_alloc(gsl_rng_mt19937);
@@ -178,10 +179,8 @@ void Population::move_random(const Resources &food) {
     
     // set up distributions
     std::gamma_distribution<float> distanceBallistic (paramBallisticGammaA, paramBallisticGammaB);
-    std::normal_distribution<float> angleBallistic (0.f, paramBallisticNormalSD);
-
+    
     std::gamma_distribution<float> distanceSearch (paramSearchGammaA, paramSearchGammaB);
-    std::normal_distribution<float> angleSearch (0.f, paramSearchNormalSD);
     
     for (int i = 0; i < nAgents; ++i) {
         // check if locked into search mode
@@ -189,7 +188,7 @@ void Population::move_random(const Resources &food) {
 
             // agent is searching and moves with brownian motion
             float distance = distanceSearch(rng);
-            float angle = angleSearch(rng);
+            float angle = vonMisesAngle(paramSearchKappa);
 
             float t1_ = static_cast<float>(cos(angle));
             float t2_ = static_cast<float>(sin(angle));
@@ -210,7 +209,7 @@ void Population::move_random(const Resources &food) {
         else {
             // agent is searching and moves with brownian motion
             float distance = distanceBallistic(rng);
-            float angle = angleBallistic(rng);
+            float angle = vonMisesAngle(paramBallisticKappa);
 
             float t1_ = static_cast<float>(cos(angle));
             float t2_ = static_cast<float>(sin(angle));

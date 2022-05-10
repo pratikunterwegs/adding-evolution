@@ -176,18 +176,18 @@ Rcpp::List simulation::do_simulation_eco() {
 //' @param regen_time The item regeneration time.
 //' @param tmax The number of timesteps per generation.
 //' @param genmax The maximum number of generations per simulation.
-//' @param ballisticGammaA Alpha parameter for a step length distribution
+//' @param paramBallisticGammaA Alpha parameter for a step length distribution
 //' used to draw steps for agent ballistic movement.
-//' @param ballisticGammaB Beta parameter for a step length distribution
+//' @param paramBallisticGammaB Beta parameter for a step length distribution
 //' used to draw steps for agent ballistic movement.
-//' @param ballisticAngle Standard deviation of a normal distribution from
+//' @param paramBallisticKappa Concentration parameter of a von Mises distribution from
 //' which turning angles are drawn in radians, for ballistic movement.
 //' Should be smaller than `searchAngle`.
-//' @param searchGammaA Alpha parameter for a step length distribution
+//' @param paramSearchGammaA Alpha parameter for a step length distribution
 //' used to draw steps for agent searching movement.
-//' @param searchGammaB Beta parameter for a step length distribution
+//' @param paramSearchGammaB Beta parameter for a step length distribution
 //' used to draw steps for agent searching movement.
-//' @param searchAngle Standard deviation of a normal distribution from
+//' @param paramSearchKappa Concentration parameter of a von Mises distribution from
 //' which turning angles are drawn in radians, for searching movement.
 //' Should be greater than `ballisticAngle`.
 //' @param range_perception The range at which agents detect items.
@@ -224,10 +224,10 @@ S4 run_model(const int scenario,
                 const int genmax,
                 const float paramBallisticGammaA,
                 const float paramBallisticGammaB,
-                const float paramBallisticNormalSD,
+                const float paramBallisticKappa,
                 const float paramSearchGammaA,
                 const float paramSearchGammaB,
-                const float paramSearchNormalSD,
+                const float paramSearchKappa,
                 const float range_perception,
                 const float costMove,
                 const int tSearch,
@@ -244,9 +244,9 @@ S4 run_model(const int scenario,
         landsize, nClusters, clusterSpread, regen_time, tmax,
         genmax, 
         paramBallisticGammaA, paramBallisticGammaB,
-        paramBallisticNormalSD,
+        paramBallisticKappa,
         paramSearchGammaA, paramSearchGammaB,
-        paramSearchNormalSD,
+        paramSearchKappa,
         range_perception, costMove, tSearch,
         pSearchSlow, pSearchFast, pStrategy,
         nThreads, dispersal,

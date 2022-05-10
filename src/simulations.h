@@ -18,10 +18,10 @@ public:
                 const int genmax,
                 const float paramBallisticGammaA,
                 const float paramBallisticGammaB,
-                const float paramBallisticNormalSD,
+                const float paramBallisticKappa,
                 const float paramSearchGammaA,
                 const float paramSearchGammaB,
-                const float paramSearchNormalSD,
+                const float paramSearchKappa,
                 const float range_perception,
                 const float costMove,
                 const int tSearch,
@@ -34,8 +34,8 @@ public:
                 const float mSize):
         // population, food, and data structures
         pop (popsize, paramBallisticGammaA, paramBallisticGammaB,
-            paramBallisticNormalSD, paramSearchGammaA,
-            paramSearchGammaB, paramSearchNormalSD,
+            paramBallisticKappa, paramSearchGammaA,
+            paramSearchGammaB, paramSearchKappa,
             range_perception,
             costMove, tSearch,
             pSearchSlow, pSearchFast, pStrategy,

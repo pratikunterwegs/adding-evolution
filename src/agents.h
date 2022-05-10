@@ -18,10 +18,10 @@ public:
     Population(const int popsize, 
         const float paramBallisticGammaA,
         const float paramBallisticGammaB,
-        const float paramBallisticNormalSD,
+        const float paramBallisticKappa,
         const float paramSearchGammaA,
         const float paramSearchGammaB,
-        const float paramSearchNormalSD,
+        const float paramSearchKappa,
         const float range_perception,
         const float costMove,
         const int tSearch, 
@@ -48,12 +48,12 @@ public:
         // for ballistic movement
         paramBallisticGammaA(paramBallisticGammaA),
         paramBallisticGammaB(paramBallisticGammaB),
-        paramBallisticNormalSD(paramBallisticNormalSD),
+        paramBallisticKappa(paramBallisticKappa),
 
         // for area restricted search
         paramSearchGammaA(paramSearchGammaA),
         paramSearchGammaB(paramSearchGammaB),
-        paramSearchNormalSD(paramSearchNormalSD),
+        paramSearchKappa(paramSearchKappa),
 
         range_perception(range_perception),
         costMove(costMove),
@@ -94,11 +94,11 @@ public:
 
     const float paramBallisticGammaA;
     const float paramBallisticGammaB;
-    const float paramBallisticNormalSD;
+    const float paramBallisticKappa;
 
     const float paramSearchGammaA;
     const float paramSearchGammaB;
-    const float paramSearchNormalSD;
+    const float paramSearchKappa;
 
     const float range_perception;
     const float costMove;
