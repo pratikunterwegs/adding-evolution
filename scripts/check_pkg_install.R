@@ -11,8 +11,8 @@ library(ggplot2)
 l = ecoevomove1::get_test_landscape(
   nItems = 1800,
   landsize = 60,
-  nClusters = 60,
-  clusterSpread = 1,
+  nClusters = 180,
+  clusterSpread = 0.3,
   regen_time = 100
 )
 
@@ -23,8 +23,7 @@ l |>
     )
 
 # test gamm distributions
-ballistic = rgamma(1000, shape = 0.5, scale = 1)
-ballistic |>
+rgamma(1000, shape = 0.25, scale = 1) |>
   hist()
 
 # test case 0
@@ -32,9 +31,9 @@ a = ecoevomove1::run_model(
   scenario = 1,
   popsize = 500,
   nItems = 1800,
-  landsize = 60,
-  nClusters = 60,
-  clusterSpread = 1.0,
+  landsize = 180,
+  nClusters = 180,
+  clusterSpread = 0.3,
   regen_time = 100,
   tmax = 100,
   genmax = 1000,
@@ -45,7 +44,7 @@ a = ecoevomove1::run_model(
   paramSearchGammaB = 1.0,
   paramSearchKappa = 0.1,
   range_perception = 1.0,
-  costMove = 0.075,
+  costMove = 0.0,
   tSearch = 5,
   pSearchSlow = 0.5,
   pSearchFast = 0.5,
@@ -56,14 +55,13 @@ a = ecoevomove1::run_model(
   mSize = 0.01
 )
 
-str(a)
-
-b = ecoevomove1::make_network(a, 5)
+b = ecoevomove1::make_network(a, 1)
 
 # ecoevomove1::
 plot_network(b, pSearch) +
-  scale_fill_distiller(
-    palette = "RdBu",
+  scico::scale_fill_scico(
+    palette = "romaO",
+    direction = 1,
     limits = c(0, 1)
   )
 
@@ -74,10 +72,12 @@ ggplot(a@trait_data)+
       moved, assoc, col = pSearch
     )
   )+
-  scale_colour_viridis_c(
-    option = "H",
+  scico::scale_colour_scico(
+    palette = "vik",
+    direction = 1,
     limits = c(0, 1)
-  )
+  )+
+  theme_test()
 
 # get movement data and plot
 d = get_move_data(a)
