@@ -10,19 +10,19 @@ library(patchwork)
 ```{r}
 # examine two landscape - patchy and homogeneous
 landscape_homog = ecoevomove1::get_test_landscape(
-  nItems = 1800,
-  landsize = 60,
-  nClusters = 180,
-  clusterSpread = 0.3,
-  regen_time = 100
+  nItems = 900,
+  landsize = 30,
+  nClusters = 90,
+  clusterSpread = 1,
+  regen_time = 10
 )
 
 landscape_patchy = ecoevomove1::get_test_landscape(
-  nItems = 1800,
-  landsize = 60,
-  nClusters = 60,
-  clusterSpread = 1.0,
-  regen_time = 100
+  nItems = 900,
+  landsize = 30,
+  nClusters = 30,
+  clusterSpread = 0.5,
+  regen_time = 10
 )
 
 # landscape visualisation
@@ -33,9 +33,7 @@ landscape_plots = lapply(
             geom_point(
                 aes(
                     x, y
-                ),
-                shape = 1, alpha = 0.5,
-                col = "forestgreen"
+                )
             )
     }
 )
@@ -47,8 +45,8 @@ wrap_plots(landscape_plots)
 
 ```{r}
 # landscape options --- 
-food_clusters = c(180, 60)
-food_spread = c(0.3, 1.0)
+food_clusters = c(90, 30)
+food_spread = c(1, 0.5)
 
 # run case study 1 over different landscape structures
 data_evolved_pop = Map(
@@ -57,28 +55,28 @@ data_evolved_pop = Map(
     f = function(clusters, spread) {
         ecoevomove1::run_model(
             scenario = 1,
-            popsize = 500,
-            nItems = 1800,
-            landsize = 60,
+            popsize = 200,
+            nItems = 450,
+            landsize = 30,
             nClusters = clusters,
             clusterSpread = spread,
-            regen_time = 100,
-            tmax = 100,
-            genmax = 1000,
-            paramBallisticGammaA = 0.25,
+            regen_time = 10,
+            tmax = 200,
+            genmax = 500,
+            paramBallisticGammaA = 0.2,
             paramBallisticGammaB = 1.0,
             paramBallisticKappa = 10.0,
-            paramSearchGammaA = 0.25,
+            paramSearchGammaA = 0.2,
             paramSearchGammaB = 1.0,
             paramSearchKappa = 0.1,
             range_perception = 1.0,
-            costMove = 0.0,
-            tSearch = 5,
+            costMove = 0.1,
+            tSearch = 8,
             pSearchSlow = 0.5,
             pSearchFast = 0.5,
             pStrategy = 0.5,
             nThreads = 2,
-            dispersal = 5.0,
+            dispersal = 10.0,
             mProb = 0.01,
             mSize = 0.01
         )
@@ -86,16 +84,17 @@ data_evolved_pop = Map(
 )
 
 # get networks
-data_networks = lapply(data_evolved_pop, ecoevomove1::make_network, 1)
+data_networks = lapply(data_evolved_pop, ecoevomove1::make_network, 2)
 
 # plot networks
 network_plots = lapply(data_networks, function(g) {
-    plot_network(g, pSearch) +
+    ecoevomove1::plot_network(g, pSearch) +
         scico::scale_fill_scico(
-            palette = "romaO",
+            palette = "roma",
             direction = 1,
             limits = c(0, 1)
-        )
+        )+
+        coord_equal()
 })
 
 wrap_plots(network_plots)
