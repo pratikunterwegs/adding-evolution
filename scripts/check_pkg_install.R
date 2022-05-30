@@ -1,18 +1,21 @@
 # check function
 Rcpp::compileAttributes()
 devtools::build()
-devtools::load_all()
-devtools::install(build = T, upgrade = "never")
+# to find RCPPGSL
+Sys.setenv("LIB_GSL" = "C:/local323")
+devtools::install(build = T, upgrade = "never",
+  args = c("--no-multiarch")  
+)
 devtools::document()
 
 library(ggplot2)
 
 # test landscapes
 l = ecoevomove1::get_test_landscape(
-  nItems = 1800,
-  landsize = 60,
-  nClusters = 180,
-  clusterSpread = 0.3,
+  nItems = 450,
+  landsize = 30,
+  nClusters = 30,
+  clusterSpread = 0.5,
   regen_time = 100
 )
 
@@ -23,7 +26,7 @@ l |>
     )
 
 # test gamm distributions
-rgamma(1000, shape = 0.25, scale = 1) |>
+rgamma(1000, shape = 0.5, scale = 0.2) |>
   hist()
 
 # test case 0
@@ -31,38 +34,59 @@ a = ecoevomove1::run_model(
   scenario = 1,
   popsize = 500,
   nItems = 1800,
-  landsize = 180,
-  nClusters = 180,
-  clusterSpread = 0.3,
+  landsize = 30,
+  nClusters = 30,
+  clusterSpread = 0.5,
   regen_time = 100,
-  tmax = 100,
-  genmax = 1000,
-  paramBallisticGammaA = 0.25,
-  paramBallisticGammaB = 1.0,
-  paramBallisticKappa = 10.0,
-  paramSearchGammaA = 0.25,
-  paramSearchGammaB = 1.0,
-  paramSearchKappa = 0.1,
+  tmax = 400,
+  genmax = 500,
+  paramGammaA = 0.5,
+  paramGammaB = 0.2,
+  paramKappa = 0.1,
   range_perception = 1.0,
-  costMove = 0.0,
-  tSearch = 5,
-  pSearchSlow = 0.5,
-  pSearchFast = 0.5,
-  pStrategy = 0.5,
+  costMove = 0.1,
   nThreads = 2,
-  dispersal = 5.0,
+  dispersal = 10.0,
   mProb = 0.01,
   mSize = 0.01
 )
 
+# check movement data
+d = ecoevomove1::get_move_data(a)
+
+ggplot(d[id == 5])+
+  geom_path(
+    aes(x, y)
+  )+
+  coord_equal()
+
+d = a@trait_data
+
+ggplot(d)+
+  annotate(
+    geom = "point",
+    x = 0.5, y = 0.1,
+    col = "red"
+  )+
+  geom_jitter(
+    aes(gammaA, kappa)
+  )+
+  labs(
+    x = "alpha", y = "kappa"
+  )
+
+ggplot(d)+
+  geom_jitter(
+    aes(gammaA, intake)
+  )
+
 b = ecoevomove1::make_network(a, 1)
 
 # ecoevomove1::
-plot_network(b, pSearch) +
-  scico::scale_fill_scico(
-    palette = "romaO",
-    direction = 1,
-    limits = c(0, 1)
+plot_network(b, kappa)+
+  scale_fill_viridis_c(
+    direction = -1
+    # limits = c(1e-3, 10)
   )
 
 # look at trait in relation to movement and intake
