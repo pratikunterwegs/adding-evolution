@@ -23,7 +23,7 @@ check_simulation_output <- function(object) {
 #' Defines the `simulation_output` class.
 #'
 #' @slot parameters list.
-#' @slot trait_data data.frame.
+#' @slot trait_data list.
 #' @slot edge_list data.frame.
 #' @slot move_data list.
 #'
@@ -35,7 +35,7 @@ setClass(
   # define the types of the class
   slots = c(
     parameters = "list",
-    trait_data = "data.frame",
+    trait_data = "list",
     edge_list = "data.frame",
     move_data = "list"
   ),
@@ -43,7 +43,7 @@ setClass(
   # define the default values of the slots
   prototype = list(
     parameters = list(),
-    trait_data = data.frame(),
+    trait_data = list(),
     edge_list = data.frame(),
     move_data = list()
   ),
