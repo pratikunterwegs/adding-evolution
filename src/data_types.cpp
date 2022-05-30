@@ -6,7 +6,9 @@ Rcpp::DataFrame Population::returnPopData() {
     Rcpp::DataFrame this_data = Rcpp::DataFrame::create(
         Named("intake") = intake,
         Named("energy") = energy,
-        Named("pSearch") = pSearch,
+        Named("gammaA") = paramGammaA,
+        Named("gammaB") = paramGammaB,
+        Named("kappa") = paramKappa,
         Named("x") = initX,
         Named("y") = initY,
         Named("xn") = coordX,
