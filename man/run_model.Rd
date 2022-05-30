@@ -14,18 +14,11 @@ run_model(
   regen_time,
   tmax,
   genmax,
-  paramBallisticGammaA,
-  paramBallisticGammaB,
-  paramBallisticKappa,
-  paramSearchGammaA,
-  paramSearchGammaB,
-  paramSearchKappa,
+  paramGammaA,
+  paramGammaB,
+  paramKappa,
   range_perception,
   costMove,
-  tSearch,
-  pSearchSlow,
-  pSearchFast,
-  pStrategy,
   nThreads,
   dispersal,
   mProb,
@@ -52,40 +45,18 @@ run_model(
 
 \item{genmax}{The maximum number of generations per simulation.}
 
-\item{paramBallisticGammaA}{Alpha parameter for a step length distribution
-used to draw steps for agent ballistic movement.}
+\item{paramGammaA}{Alpha parameter for a step length distribution
+used to draw steps for agent movement.}
 
-\item{paramBallisticGammaB}{Beta parameter for a step length distribution
-used to draw steps for agent ballistic movement.}
+\item{paramGammaB}{Beta parameter for a step length distribution
+used to draw steps for agent movement.}
 
-\item{paramBallisticKappa}{Concentration parameter of a von Mises distribution from
-which turning angles are drawn in radians, for ballistic movement.
-Should be smaller than \code{searchAngle}.}
-
-\item{paramSearchGammaA}{Alpha parameter for a step length distribution
-used to draw steps for agent searching movement.}
-
-\item{paramSearchGammaB}{Beta parameter for a step length distribution
-used to draw steps for agent searching movement.}
-
-\item{paramSearchKappa}{Concentration parameter of a von Mises distribution from
-which turning angles are drawn in radians, for searching movement.
-Should be greater than \code{ballisticAngle}.}
+\item{paramKappa}{Concentration parameter of a von Mises distribution from
+which turning angles are drawn in radians, for ballistic movement.}
 
 \item{range_perception}{The range at which agents detect items.}
 
 \item{costMove}{The energetic cost per distance moved.}
-
-\item{tSearch}{The duration of area restricted search; this is fixed, while
-the probability of switching to this mode varies.}
-
-\item{pSearchSlow}{The probability of switching to search mode for so-called slow
-agents.}
-
-\item{pSearchFast}{The probability of switching to search mode for so-called fast
-agents.}
-
-\item{pStrategy}{The initial proportion of fast individuals in the population.}
 
 \item{nThreads}{How many threads to parallelise over. Set to 1 to run on
 the HPC Peregrine cluster.}
