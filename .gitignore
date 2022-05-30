@@ -49,3 +49,6 @@ inst
 jobs
 tests
 vignettes
+
+# ignore gsl
+gsl/
