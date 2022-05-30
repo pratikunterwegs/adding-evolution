@@ -29,9 +29,9 @@ Rcpp::List simulation::do_simulation_evo() {
 
     Rcpp::Rcout << "initialised population positions\n";
     Rcpp::DataFrame edgeList;
-    Rcpp::DataFrame pop_trait_data;
-
-    Rcpp::Rcout << "created single edge list object\n";
+    
+    // prepare list for generation data
+    Rcpp::List genData (genmax);
 
     // all ecological dynamics
     food.countAvailable();
@@ -66,9 +66,10 @@ Rcpp::List simulation::do_simulation_evo() {
         
         // log data in the last generation
         if (gen == (genmax - 1)) {
-            pop_trait_data = pop.returnPopData();
             edgeList = pop.pbsn.getNtwkDf();
         }
+
+        genData[gen] = pop.returnPopData();
 
         // reproduce
         pop.Reproduce(food, dispersal, mProb, mSize);
@@ -79,7 +80,7 @@ Rcpp::List simulation::do_simulation_evo() {
     Rcpp::Rcout << "data prepared\n";
 
     return Rcpp::List::create(
-        Named("gen_data") = pop_trait_data,
+        Named("gen_data") = genData,
         Named("edge_list") = edgeList,
         Named("move_data") = md.getMoveData()
     );
@@ -106,9 +107,7 @@ Rcpp::List simulation::do_simulation_eco() {
 
     Rcpp::Rcout << "initialised population positions\n";
     Rcpp::DataFrame edgeList;
-
-    Rcpp::Rcout << "created single edge list object\n";
-
+    
     // all ecological dynamics
     food.countAvailable();
     // reset counter and positions
