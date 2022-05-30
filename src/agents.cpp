@@ -9,6 +9,9 @@
 #include <boost/foreach.hpp>
 
 #include <Rcpp.h>
+#include <RcppGSL.h>
+#include <gsl/gsl_rng.h>
+#include <gsl/gsl_randist.h>
 #include <RcppParallel.h>
 
 #include "network.h"
@@ -17,7 +20,7 @@
 #include "vonmises.h"
 
 /// random number generator for GSL
-// gsl_rng *r = gsl_rng_alloc(gsl_rng_mt19937);
+gsl_rng *r = gsl_rng_alloc(gsl_rng_mt19937);
 
 // to shuffle pop id
 void Population::shufflePop() {
@@ -62,20 +65,20 @@ void Population::initPos(Resources food) {
     updateRtree();
 }
 
-// set agent probability of switching to area restricted search
-void Population::setTrait() {
+// // set agent probability of switching to area restricted search
+// void Population::setTrait() {
 
-    // create a cauchy distribution, mSize is the scale
-    std::bernoulli_distribution fastOrSlow(pStrategy);
+//     // create a cauchy distribution, mSize is the scale
+//     std::bernoulli_distribution fastOrSlow(pStrategy);
 
-    for(int i = 0; i < nAgents; i++) {
-        if(fastOrSlow(rng)) {
-            pSearch[i] = pSearchFast;
-        } else {
-            pSearch[i] = pSearchSlow;
-        }
-    }
-}
+//     for(int i = 0; i < nAgents; i++) {
+//         if(fastOrSlow(rng)) {
+//             pSearch[i] = pSearchFast;
+//         } else {
+//             pSearch[i] = pSearchSlow;
+//         }
+//     }
+// }
 
 float get_distance(float x1, float x2, float y1, float y2) {
     return std::sqrt(std::pow((x1 - x2), 2) + std::pow((y1 - y2), 2));
@@ -177,53 +180,28 @@ float wrapLoc(float l, float maxl) {
 // and also turning angles
 void Population::move_random(const Resources &food) {
     
-    // set up distributions
-    std::gamma_distribution<float> distanceBallistic (paramBallisticGammaA, paramBallisticGammaB);
-    
-    std::gamma_distribution<float> distanceSearch (paramSearchGammaA, paramSearchGammaB);
-    
     for (int i = 0; i < nAgents; ++i) {
-        // check if locked into search mode
-        if (counter[i] > 0) {
+        // set up distributions --- this is very costly but oh well
+        // there are more efficient ways but this will do for now.
+        float distance = static_cast<float>(gsl_ran_gamma(r, paramGammaA[i], paramGammaB));
+        // std::gamma_distribution<float> distanceBallistic (paramGammaA[i], paramGammaB[i]);
 
-            // agent is searching and moves with brownian motion
-            float distance = distanceSearch(rng);
-            float angle = vonMisesAngle(paramSearchKappa);
+        // agent moves drawing from gamma distr
+        // float distance = distanceSearch(rng);
+        float angle = vonMisesAngle(paramKappa[i]);
 
-            float t1_ = static_cast<float>(cos(angle));
-            float t2_ = static_cast<float>(sin(angle));
+        float t1_ = static_cast<float>(cos(angle));
+        float t2_ = static_cast<float>(sin(angle));
 
-            coordX[i] = coordX[i] + (distance * t1_);
-            coordY[i] = coordY[i] + (distance * t2_);
+        coordX[i] = coordX[i] + (distance * t1_);
+        coordY[i] = coordY[i] + (distance * t2_);
 
-            coordX[i] = wrapLoc(coordX[i], food.dSize);
-            coordY[i] = wrapLoc(coordY[i], food.dSize);
+        coordX[i] = wrapLoc(coordX[i], food.dSize);
+        coordY[i] = wrapLoc(coordY[i], food.dSize);
 
-            // movement and cost of movement
-            moved[i] += distance;
-            energy[i] -= (distance * costMove);
-
-            // agent counter for search reduces
-            counter[i] --;
-        }
-        else {
-            // agent is searching and moves with brownian motion
-            float distance = distanceBallistic(rng);
-            float angle = vonMisesAngle(paramBallisticKappa);
-
-            float t1_ = static_cast<float>(cos(angle));
-            float t2_ = static_cast<float>(sin(angle));
-
-            coordX[i] = coordX[i] + (distance * t1_);
-            coordY[i] = coordY[i] + (distance * t2_);
-
-            coordX[i] = wrapLoc(coordX[i], food.dSize);
-            coordY[i] = wrapLoc(coordY[i], food.dSize);
-            
-            // movement and cost of movement
-            moved[i] += distance;
-            energy[i] -= (distance * costMove);   
-        }
+        // movement and cost of movement
+        moved[i] += distance;
+        energy[i] -= (distance * costMove);
     }
 }
 
@@ -302,12 +280,6 @@ void Population::doForage(Resources &food) {
                 intake[id] += 1.0; // increased here --- not as described --- okay for now.
                 energy[id] += 1.0;
 
-                std::bernoulli_distribution bSearch(pSearch[i]);
-                // individuals have some probability of shifting to Search
-                if(bSearch(rng)) {
-                    counter[id] = tSearch;
-                }
-
                 // reset food availability
                 food.available[thisItem] = false;
                 food.counter[thisItem] = food.regen_time;
@@ -369,7 +341,8 @@ void Population::Reproduce(const Resources food,
     std::discrete_distribution<> weightedLottery(vecFitness.begin(), vecFitness.end());
 
     // get parent trait based on weighted lottery
-    std::vector<float> tmp_pSearch (nAgents, 0.5f);
+    std::vector<float> tmp_gammaA (nAgents, 0.5f);
+    std::vector<float> tmp_kappa (nAgents, 0.5f);
     
     // reset associations
     associations = std::vector<int> (nAgents, 0);
@@ -387,7 +360,8 @@ void Population::Reproduce(const Resources food,
     for (int a = 0; a < nAgents; a++) {
         size_t parent_id = static_cast<size_t>(weightedLottery(rng));
 
-        tmp_pSearch[a] = pSearch[parent_id];
+        tmp_gammaA[a] = paramGammaA[parent_id];
+        tmp_kappa[a] = paramKappa[parent_id];
 
         // inherit positions from parent
         coord_x_2[a] = coordX[parent_id] + sprout(rng);
@@ -415,17 +389,23 @@ void Population::Reproduce(const Resources food,
     // trait mutation prob is mProb, in a two step process
     for (int a = 0; a < nAgents; a++) {
         if(mutation_happens(rng)) {
-            tmp_pSearch[a] = tmp_pSearch[a] + mutation_size(rng);
+            tmp_gammaA[a] = tmp_gammaA[a] + mutation_size(rng);
             
-            if(tmp_pSearch[a] < 0.f) tmp_pSearch[a] = 0.00001f;
-            if(tmp_pSearch[a] > 1.f) tmp_pSearch[a] = 0.99f;
+            if(tmp_gammaA[a] < 0.f) tmp_gammaA[a] = 0.00001f;
+        }
+        if(mutation_happens(rng)) {
+            tmp_kappa[a] = tmp_kappa[a] + mutation_size(rng);
+            
+            if(tmp_kappa[a] < 0.f) tmp_kappa[a] = 0.00001f;
         }
     }
     
     // swap trait matrices
-    std::swap(pSearch, tmp_pSearch);
+    std::swap(paramGammaA, tmp_gammaA);
+    tmp_gammaA.clear();
 
-    tmp_pSearch.clear();
+    std::swap(paramKappa, tmp_kappa);
+    tmp_kappa.clear();
     
     // swap energy
     std::vector<float> tmpEnergy (nAgents, 0.001f);

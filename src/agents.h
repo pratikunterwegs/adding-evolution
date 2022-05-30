@@ -16,16 +16,11 @@
 struct Population {
 public:
     Population(const int popsize, 
-        const float paramBallisticGammaA,
-        const float paramBallisticGammaB,
-        const float paramBallisticKappa,
-        const float paramSearchGammaA,
-        const float paramSearchGammaB,
-        const float paramSearchKappa,
+        const float paramGammaA,
+        const float paramGammaB,
+        const float paramKappa,
         const float range_perception,
         const float costMove,
-        const int tSearch, 
-        const float pSearchSlow, const float pSearchFast, const float pStrategy,
         const int scenario
     ) :
         // agents, positions, energy and traits
@@ -36,24 +31,11 @@ public:
         initY (popsize, 0.0f),
         intake (popsize, 0.001f),
         energy (popsize, 0.001f),
-        pSearch (popsize, 0.5f),
 
-        // probabilities for the strategy switch and the prop
-        // of individuals in each strategy for ecological sims
-        pSearchSlow(pSearchSlow),
-        pSearchFast(pSearchFast),
-        pStrategy(pStrategy),
-
-        // parameters for the two kinds of random walk
-        // for ballistic movement
-        paramBallisticGammaA(paramBallisticGammaA),
-        paramBallisticGammaB(paramBallisticGammaB),
-        paramBallisticKappa(paramBallisticKappa),
-
-        // for area restricted search
-        paramSearchGammaA(paramSearchGammaA),
-        paramSearchGammaB(paramSearchGammaB),
-        paramSearchKappa(paramSearchKappa),
+        // parameters for the initial random walk
+        paramGammaA(popsize, paramGammaA),
+        paramGammaB(paramGammaB),
+        paramKappa(popsize, paramKappa),
 
         range_perception(range_perception),
         costMove(costMove),
@@ -61,9 +43,6 @@ public:
         // counters for handling and social metrics
         counter (popsize, 0),
         associations(popsize, 0),
-
-        // agent sensory parameters
-        tSearch(tSearch),
 
         // vectors for agent order
         order(popsize, 1),
@@ -85,20 +64,10 @@ public:
     std::vector<float> initY;
     std::vector<float> intake;
     std::vector<float> energy;
-    // prob shifting to area restricted search
-    std::vector<float> pSearch;
-
-    const float pSearchSlow;
-    const float pSearchFast;
-    const float pStrategy;
-
-    const float paramBallisticGammaA;
-    const float paramBallisticGammaB;
-    const float paramBallisticKappa;
-
-    const float paramSearchGammaA;
-    const float paramSearchGammaB;
-    const float paramSearchKappa;
+    
+    std::vector<float> paramGammaA;
+    const float paramGammaB;
+    std::vector<float> paramKappa;
 
     const float range_perception;
     const float costMove;
@@ -106,9 +75,6 @@ public:
     // counter and metrics
     std::vector<int> counter;
     std::vector<int> associations; // number of total interactions
-
-    // this is now actually the time for area restricted search
-    const int tSearch;
 
     // shuffle vector and transmission
     std::vector<int> order;
@@ -126,7 +92,6 @@ public:
     /// functions for the population ///
     // population order, trait and position randomiser
     void shufflePop();
-    void setTrait ();
     void initPos(Resources food);
 
     int countFood (const Resources &food, const float xloc, const float yloc);
