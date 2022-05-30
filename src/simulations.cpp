@@ -18,7 +18,6 @@ Rcpp::List simulation::do_simulation_evo() {
     food.countAvailable();
     Rcpp::Rcout << "landscape with " << food.nClusters << " clusters\n";
 
-    pop.setTrait();
     Rcpp::Rcout << "pop with " << pop.nAgents << " agents for " << genmax << " gens " << tmax << " timesteps\n";
 
     // prepare scenario
@@ -96,7 +95,6 @@ Rcpp::List simulation::do_simulation_eco() {
     food.countAvailable();
     Rcpp::Rcout << "landscape with " << food.nClusters << " clusters\n";
 
-    pop.setTrait();
     Rcpp::Rcout << "pop with " << pop.nAgents << " agents for " << genmax << " gens " << tmax << " timesteps\n";
 
     // prepare scenario
@@ -164,29 +162,14 @@ Rcpp::List simulation::do_simulation_eco() {
 //' @param regen_time The item regeneration time.
 //' @param tmax The number of timesteps per generation.
 //' @param genmax The maximum number of generations per simulation.
-//' @param paramBallisticGammaA Alpha parameter for a step length distribution
-//' used to draw steps for agent ballistic movement.
-//' @param paramBallisticGammaB Beta parameter for a step length distribution
-//' used to draw steps for agent ballistic movement.
-//' @param paramBallisticKappa Concentration parameter of a von Mises distribution from
+//' @param paramGammaA Alpha parameter for a step length distribution
+//' used to draw steps for agent movement.
+//' @param paramGammaB Beta parameter for a step length distribution
+//' used to draw steps for agent movement.
+//' @param paramKappa Concentration parameter of a von Mises distribution from
 //' which turning angles are drawn in radians, for ballistic movement.
-//' Should be smaller than `searchAngle`.
-//' @param paramSearchGammaA Alpha parameter for a step length distribution
-//' used to draw steps for agent searching movement.
-//' @param paramSearchGammaB Beta parameter for a step length distribution
-//' used to draw steps for agent searching movement.
-//' @param paramSearchKappa Concentration parameter of a von Mises distribution from
-//' which turning angles are drawn in radians, for searching movement.
-//' Should be greater than `ballisticAngle`.
 //' @param range_perception The range at which agents detect items.
 //' @param costMove The energetic cost per distance moved.
-//' @param tSearch The duration of area restricted search; this is fixed, while
-//' the probability of switching to this mode varies.
-//' @param pSearchSlow The probability of switching to search mode for so-called slow
-//' agents.
-//' @param pSearchFast The probability of switching to search mode for so-called fast
-//' agents.
-//' @param pStrategy The initial proportion of fast individuals in the population.
 //' @param nThreads How many threads to parallelise over. Set to 1 to run on
 //' the HPC Peregrine cluster.
 //' @param dispersal A float value; the standard deviation of a normal
@@ -210,18 +193,11 @@ S4 run_model(const int scenario,
                 const int regen_time,
                 const int tmax,
                 const int genmax,
-                const float paramBallisticGammaA,
-                const float paramBallisticGammaB,
-                const float paramBallisticKappa,
-                const float paramSearchGammaA,
-                const float paramSearchGammaB,
-                const float paramSearchKappa,
+                const float paramGammaA,
+                const float paramGammaB,
+                const float paramKappa,
                 const float range_perception,
                 const float costMove,
-                const int tSearch,
-                const float pSearchSlow,
-                const float pSearchFast,
-                const float pStrategy,
                 const int nThreads,
                 const float dispersal,
                 const float mProb,
@@ -231,12 +207,8 @@ S4 run_model(const int scenario,
     simulation this_sim(scenario, popsize, nItems,
         landsize, nClusters, clusterSpread, regen_time, tmax,
         genmax, 
-        paramBallisticGammaA, paramBallisticGammaB,
-        paramBallisticKappa,
-        paramSearchGammaA, paramSearchGammaB,
-        paramSearchKappa,
-        range_perception, costMove, tSearch,
-        pSearchSlow, pSearchFast, pStrategy,
+        paramGammaA, paramGammaB, paramKappa,
+        range_perception, costMove, 
         nThreads, dispersal,
         mProb, mSize
     );
@@ -262,9 +234,6 @@ S4 run_model(const int scenario,
             Named("pop_size") = popsize,
             Named("pop_density") = static_cast<float>(popsize) / landsize,
             Named("item_density") = static_cast<float>(nItems) / landsize,
-            Named("pSearchSlow") = pSearchSlow,
-            Named("pSearchFast") = pSearchFast,
-            Named("pStrategy") = pStrategy,
             Named("dispersal") = dispersal
         );
 
