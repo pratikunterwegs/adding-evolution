@@ -28,29 +28,14 @@ get_test_landscape <- function(nItems, landsize, nClusters, clusterSpread, regen
 #' @param regen_time The item regeneration time.
 #' @param tmax The number of timesteps per generation.
 #' @param genmax The maximum number of generations per simulation.
-#' @param paramBallisticGammaA Alpha parameter for a step length distribution
-#' used to draw steps for agent ballistic movement.
-#' @param paramBallisticGammaB Beta parameter for a step length distribution
-#' used to draw steps for agent ballistic movement.
-#' @param paramBallisticKappa Concentration parameter of a von Mises distribution from
+#' @param paramGammaA Alpha parameter for a step length distribution
+#' used to draw steps for agent movement.
+#' @param paramGammaB Beta parameter for a step length distribution
+#' used to draw steps for agent movement.
+#' @param paramKappa Concentration parameter of a von Mises distribution from
 #' which turning angles are drawn in radians, for ballistic movement.
-#' Should be smaller than `searchAngle`.
-#' @param paramSearchGammaA Alpha parameter for a step length distribution
-#' used to draw steps for agent searching movement.
-#' @param paramSearchGammaB Beta parameter for a step length distribution
-#' used to draw steps for agent searching movement.
-#' @param paramSearchKappa Concentration parameter of a von Mises distribution from
-#' which turning angles are drawn in radians, for searching movement.
-#' Should be greater than `ballisticAngle`.
 #' @param range_perception The range at which agents detect items.
 #' @param costMove The energetic cost per distance moved.
-#' @param tSearch The duration of area restricted search; this is fixed, while
-#' the probability of switching to this mode varies.
-#' @param pSearchSlow The probability of switching to search mode for so-called slow
-#' agents.
-#' @param pSearchFast The probability of switching to search mode for so-called fast
-#' agents.
-#' @param pStrategy The initial proportion of fast individuals in the population.
 #' @param nThreads How many threads to parallelise over. Set to 1 to run on
 #' the HPC Peregrine cluster.
 #' @param dispersal A float value; the standard deviation of a normal
@@ -64,7 +49,7 @@ get_test_landscape <- function(nItems, landsize, nClusters, clusterSpread, regen
 #' @param mSize Controls the mutational step size, and represents the scale
 #' parameter of a Cauchy distribution. 
 #' @return An S4 class, `simulation_output`, with simulation outcomes.
-run_model <- function(scenario, popsize, nItems, landsize, nClusters, clusterSpread, regen_time, tmax, genmax, paramBallisticGammaA, paramBallisticGammaB, paramBallisticKappa, paramSearchGammaA, paramSearchGammaB, paramSearchKappa, range_perception, costMove, tSearch, pSearchSlow, pSearchFast, pStrategy, nThreads, dispersal, mProb, mSize) {
-    .Call(`_ecoevomove1_run_model`, scenario, popsize, nItems, landsize, nClusters, clusterSpread, regen_time, tmax, genmax, paramBallisticGammaA, paramBallisticGammaB, paramBallisticKappa, paramSearchGammaA, paramSearchGammaB, paramSearchKappa, range_perception, costMove, tSearch, pSearchSlow, pSearchFast, pStrategy, nThreads, dispersal, mProb, mSize)
+run_model <- function(scenario, popsize, nItems, landsize, nClusters, clusterSpread, regen_time, tmax, genmax, paramGammaA, paramGammaB, paramKappa, range_perception, costMove, nThreads, dispersal, mProb, mSize) {
+    .Call(`_ecoevomove1_run_model`, scenario, popsize, nItems, landsize, nClusters, clusterSpread, regen_time, tmax, genmax, paramGammaA, paramGammaB, paramKappa, range_perception, costMove, nThreads, dispersal, mProb, mSize)
 }
 
