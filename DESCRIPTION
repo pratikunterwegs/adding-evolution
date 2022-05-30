@@ -14,6 +14,7 @@ Depends:
 LinkingTo: 
     Rcpp,
     RcppParallel,
+    RcppGSL,
     BH,
     testthat
 Imports: 
@@ -24,7 +25,8 @@ Imports:
     data.table,
     glue,
     ggplot2,
-    rlang
+    rlang,
+    RcppGSL
 Suggests: 
     testthat (>= 3.0.0),
     ssh,
