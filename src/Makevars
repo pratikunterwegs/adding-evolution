@@ -1,2 +1,10 @@
 CXXSTD = -std=c++14
 PKG_LIBS += $(shell ${R_HOME}/bin/Rscript -e "RcppParallel::RcppParallelLibs()")
+
+# set by configure
+GSL_CFLAGS = @GSL_CFLAGS@
+GSL_LIBS   = @GSL_LIBS@
+
+# combine with standard arguments for R
+PKG_CPPFLAGS = $(GSL_CFLAGS)
+PKG_LIBS = $(GSL_LIBS) 
