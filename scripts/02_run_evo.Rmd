@@ -1,0 +1,23 @@
+
+```{r}
+# this works, giving nice bimodal movement distr
+a = ecoevomove1::run_model(
+  scenario = 1,
+  popsize = 500,
+  nItems = 450,
+  landsize = 30,
+  nClusters = 90,
+  clusterSpread = 0.5,
+  regen_time = 50,
+  tmax = 100,
+  genmax = 500,
+  paramMu = 0.1,
+  paramKappa = 0.1,
+  range_perception = 0.5,
+  costMove = 0.01,
+  nThreads = 2,
+  dispersal = 5.0,
+  mProb = 0.01,
+  mSize = 0.01
+)
+```
