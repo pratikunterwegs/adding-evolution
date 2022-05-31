@@ -16,8 +16,7 @@
 struct Population {
 public:
     Population(const int popsize, 
-        const float paramGammaA,
-        const float paramGammaB,
+        const float paramMu,
         const float paramKappa,
         const float range_perception,
         const float costMove,
@@ -33,8 +32,7 @@ public:
         energy (popsize, 0.001f),
 
         // parameters for the initial random walk
-        paramGammaA(popsize, paramGammaA),
-        paramGammaB(paramGammaB),
+        paramMu(popsize, paramMu),
         paramKappa(popsize, paramKappa),
 
         range_perception(range_perception),
@@ -65,8 +63,7 @@ public:
     std::vector<float> intake;
     std::vector<float> energy;
     
-    std::vector<float> paramGammaA;
-    const float paramGammaB;
+    std::vector<float> paramMu;
     std::vector<float> paramKappa;
 
     const float range_perception;

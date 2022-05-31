@@ -177,8 +177,7 @@ void Population::move_random(const Resources &food) {
     for (int i = 0; i < nAgents; ++i) {
         // set up distributions --- this is very costly but oh well
         // there are more efficient ways but this will do for now.
-        float distance = static_cast<float>(gsl_ran_gamma(r, paramGammaA[i], paramGammaB));
-        // std::gamma_distribution<float> distanceBallistic (paramGammaA[i], paramGammaB[i]);
+        float distance = static_cast<float>(gsl_ran_exponential(r, paramMu[i]));
 
         // agent moves drawing from gamma distr
         // float distance = distanceSearch(rng);
@@ -354,7 +353,7 @@ void Population::Reproduce(const Resources food,
     for (int a = 0; a < nAgents; a++) {
         size_t parent_id = static_cast<size_t>(weightedLottery(rng));
 
-        tmp_gammaA[a] = paramGammaA[parent_id];
+        tmp_gammaA[a] = paramMu[parent_id];
         tmp_kappa[a] = paramKappa[parent_id];
 
         // inherit positions from parent
@@ -395,7 +394,7 @@ void Population::Reproduce(const Resources food,
     }
     
     // swap trait matrices
-    std::swap(paramGammaA, tmp_gammaA);
+    std::swap(paramMu, tmp_gammaA);
     tmp_gammaA.clear();
 
     std::swap(paramKappa, tmp_kappa);
