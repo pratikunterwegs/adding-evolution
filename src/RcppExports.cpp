@@ -27,8 +27,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // run_model
-S4 run_model(const int scenario, const int popsize, const int nItems, const float landsize, const int nClusters, const float clusterSpread, const int regen_time, const int tmax, const int genmax, const float paramGammaA, const float paramGammaB, const float paramKappa, const float range_perception, const float costMove, const int nThreads, const float dispersal, const float mProb, const float mSize);
-RcppExport SEXP _ecoevomove1_run_model(SEXP scenarioSEXP, SEXP popsizeSEXP, SEXP nItemsSEXP, SEXP landsizeSEXP, SEXP nClustersSEXP, SEXP clusterSpreadSEXP, SEXP regen_timeSEXP, SEXP tmaxSEXP, SEXP genmaxSEXP, SEXP paramGammaASEXP, SEXP paramGammaBSEXP, SEXP paramKappaSEXP, SEXP range_perceptionSEXP, SEXP costMoveSEXP, SEXP nThreadsSEXP, SEXP dispersalSEXP, SEXP mProbSEXP, SEXP mSizeSEXP) {
+S4 run_model(const int scenario, const int popsize, const int nItems, const float landsize, const int nClusters, const float clusterSpread, const int regen_time, const int tmax, const int genmax, const float paramMu, const float paramKappa, const float range_perception, const float costMove, const int nThreads, const float dispersal, const float mProb, const float mSize);
+RcppExport SEXP _ecoevomove1_run_model(SEXP scenarioSEXP, SEXP popsizeSEXP, SEXP nItemsSEXP, SEXP landsizeSEXP, SEXP nClustersSEXP, SEXP clusterSpreadSEXP, SEXP regen_timeSEXP, SEXP tmaxSEXP, SEXP genmaxSEXP, SEXP paramMuSEXP, SEXP paramKappaSEXP, SEXP range_perceptionSEXP, SEXP costMoveSEXP, SEXP nThreadsSEXP, SEXP dispersalSEXP, SEXP mProbSEXP, SEXP mSizeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -41,8 +41,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const int >::type regen_time(regen_timeSEXP);
     Rcpp::traits::input_parameter< const int >::type tmax(tmaxSEXP);
     Rcpp::traits::input_parameter< const int >::type genmax(genmaxSEXP);
-    Rcpp::traits::input_parameter< const float >::type paramGammaA(paramGammaASEXP);
-    Rcpp::traits::input_parameter< const float >::type paramGammaB(paramGammaBSEXP);
+    Rcpp::traits::input_parameter< const float >::type paramMu(paramMuSEXP);
     Rcpp::traits::input_parameter< const float >::type paramKappa(paramKappaSEXP);
     Rcpp::traits::input_parameter< const float >::type range_perception(range_perceptionSEXP);
     Rcpp::traits::input_parameter< const float >::type costMove(costMoveSEXP);
@@ -50,14 +49,14 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const float >::type dispersal(dispersalSEXP);
     Rcpp::traits::input_parameter< const float >::type mProb(mProbSEXP);
     Rcpp::traits::input_parameter< const float >::type mSize(mSizeSEXP);
-    rcpp_result_gen = Rcpp::wrap(run_model(scenario, popsize, nItems, landsize, nClusters, clusterSpread, regen_time, tmax, genmax, paramGammaA, paramGammaB, paramKappa, range_perception, costMove, nThreads, dispersal, mProb, mSize));
+    rcpp_result_gen = Rcpp::wrap(run_model(scenario, popsize, nItems, landsize, nClusters, clusterSpread, regen_time, tmax, genmax, paramMu, paramKappa, range_perception, costMove, nThreads, dispersal, mProb, mSize));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
     {"_ecoevomove1_get_test_landscape", (DL_FUNC) &_ecoevomove1_get_test_landscape, 5},
-    {"_ecoevomove1_run_model", (DL_FUNC) &_ecoevomove1_run_model, 18},
+    {"_ecoevomove1_run_model", (DL_FUNC) &_ecoevomove1_run_model, 17},
     {NULL, NULL, 0}
 };
 

@@ -28,9 +28,7 @@ get_test_landscape <- function(nItems, landsize, nClusters, clusterSpread, regen
 #' @param regen_time The item regeneration time.
 #' @param tmax The number of timesteps per generation.
 #' @param genmax The maximum number of generations per simulation.
-#' @param paramGammaA Alpha parameter for a step length distribution
-#' used to draw steps for agent movement.
-#' @param paramGammaB Beta parameter for a step length distribution
+#' @param paramMu Mu parameter for an exponential distribution
 #' used to draw steps for agent movement.
 #' @param paramKappa Concentration parameter of a von Mises distribution from
 #' which turning angles are drawn in radians, for ballistic movement.
@@ -49,7 +47,7 @@ get_test_landscape <- function(nItems, landsize, nClusters, clusterSpread, regen
 #' @param mSize Controls the mutational step size, and represents the scale
 #' parameter of a Cauchy distribution. 
 #' @return An S4 class, `simulation_output`, with simulation outcomes.
-run_model <- function(scenario, popsize, nItems, landsize, nClusters, clusterSpread, regen_time, tmax, genmax, paramGammaA, paramGammaB, paramKappa, range_perception, costMove, nThreads, dispersal, mProb, mSize) {
-    .Call(`_ecoevomove1_run_model`, scenario, popsize, nItems, landsize, nClusters, clusterSpread, regen_time, tmax, genmax, paramGammaA, paramGammaB, paramKappa, range_perception, costMove, nThreads, dispersal, mProb, mSize)
+run_model <- function(scenario, popsize, nItems, landsize, nClusters, clusterSpread, regen_time, tmax, genmax, paramMu, paramKappa, range_perception, costMove, nThreads, dispersal, mProb, mSize) {
+    .Call(`_ecoevomove1_run_model`, scenario, popsize, nItems, landsize, nClusters, clusterSpread, regen_time, tmax, genmax, paramMu, paramKappa, range_perception, costMove, nThreads, dispersal, mProb, mSize)
 }
 
