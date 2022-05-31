@@ -36,16 +36,14 @@ setClass(
   slots = c(
     parameters = "list",
     trait_data = "list",
-    edge_list = "data.frame",
-    move_data = "list"
+    edge_list = "data.frame"
   ),
 
   # define the default values of the slots
   prototype = list(
     parameters = list(),
     trait_data = list(),
-    edge_list = data.frame(),
-    move_data = list()
+    edge_list = data.frame()
   ),
 
   # check validity of class
