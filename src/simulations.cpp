@@ -52,7 +52,7 @@ Rcpp::List simulation::do_simulation_evo() {
             // movement section
             pop.move_random(food);
 
-            md.updateMoveData(pop, t);
+            // md.updateMoveData(pop, t);
 
             // foraging -- split into parallelised picking
             // and non-parallel exploitation
@@ -81,8 +81,7 @@ Rcpp::List simulation::do_simulation_evo() {
 
     return Rcpp::List::create(
         Named("gen_data") = genData,
-        Named("edge_list") = edgeList,
-        Named("move_data") = md.getMoveData()
+        Named("edge_list") = edgeList
     );
 }
 
@@ -161,9 +160,7 @@ Rcpp::List simulation::do_simulation_eco() {
 //' @param regen_time The item regeneration time.
 //' @param tmax The number of timesteps per generation.
 //' @param genmax The maximum number of generations per simulation.
-//' @param paramGammaA Alpha parameter for a step length distribution
-//' used to draw steps for agent movement.
-//' @param paramGammaB Beta parameter for a step length distribution
+//' @param paramMu Mu parameter for an exponential distribution
 //' used to draw steps for agent movement.
 //' @param paramKappa Concentration parameter of a von Mises distribution from
 //' which turning angles are drawn in radians, for ballistic movement.
@@ -192,8 +189,7 @@ S4 run_model(const int scenario,
                 const int regen_time,
                 const int tmax,
                 const int genmax,
-                const float paramGammaA,
-                const float paramGammaB,
+                const float paramMu,
                 const float paramKappa,
                 const float range_perception,
                 const float costMove,
@@ -206,7 +202,7 @@ S4 run_model(const int scenario,
     simulation this_sim(scenario, popsize, nItems,
         landsize, nClusters, clusterSpread, regen_time, tmax,
         genmax, 
-        paramGammaA, paramGammaB, paramKappa,
+        paramMu, paramKappa,
         range_perception, costMove, 
         nThreads, dispersal,
         mProb, mSize
@@ -241,7 +237,6 @@ S4 run_model(const int scenario,
     x.slot("parameters") = Rcpp::wrap(param_list);
     x.slot("trait_data") = Rcpp::wrap(simOutput["gen_data"]);
     x.slot("edge_list") = Rcpp::wrap(simOutput["edge_list"]);
-    x.slot("move_data") = Rcpp::wrap(simOutput["move_data"]);
 
     return(x);
 }

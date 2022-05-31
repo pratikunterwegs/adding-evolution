@@ -16,8 +16,7 @@ public:
                 const int regen_time,
                 const int tmax,
                 const int genmax,
-                const float paramGammaA,
-                const float paramGammaB,
+                const float paramMu,
                 const float paramKappa,
                 const float range_perception,
                 const float costMove,
@@ -26,7 +25,7 @@ public:
                 const float mProb,
                 const float mSize):
         // population, food, and data structures
-        pop (popsize, paramGammaA, paramGammaB,
+        pop (popsize, paramMu,
             paramKappa,
             range_perception,
             costMove,
