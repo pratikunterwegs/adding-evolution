@@ -21,3 +21,26 @@ a = ecoevomove1::run_model(
   mSize = 0.01
 )
 ```
+
+```{r}
+# use this instead
+ecoevomove1::run_model(
+  scenario = 1,
+  popsize = 250,
+  nItems = 450,
+  landsize = 30,
+  nClusters = 30,
+  clusterSpread = 0.5,
+  regen_time = 10,
+  tmax = 400,
+  genmax = 200,
+  paramMu = 1,
+  paramKappa = 1,
+  range_perception = 1,
+  costMove = 0.05,
+  nThreads = 2,
+  dispersal = 10.0,
+  mProb = 0.05,
+  mSize = 0.01
+)
+```
