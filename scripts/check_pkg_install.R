@@ -23,67 +23,102 @@ l |>
   ggplot()+
     geom_point(
       aes(x, y)
-    )
+    )+
+    coord_equal()
 
 # test gamm distributions
-rgamma(1000, shape = 0.5, scale = 0.2) |>
+mu = 1
+rexp(n = 1000, rate = 1/(mu)) |>
+  hist()
+
+rotations::rvmises(n = 1000, kappa = 1) |>
+  # as.vector() |>
   hist()
 
 # test case 0
 a = ecoevomove1::run_model(
   scenario = 1,
-  popsize = 500,
-  nItems = 1800,
+  popsize = 250,
+  nItems = 450,
   landsize = 30,
   nClusters = 30,
   clusterSpread = 0.5,
-  regen_time = 100,
+  regen_time = 10,
   tmax = 400,
   genmax = 500,
-  paramGammaA = 0.5,
-  paramGammaB = 0.2,
-  paramKappa = 0.1,
-  range_perception = 1.0,
-  costMove = 0.1,
+  paramMu = 1,
+  paramKappa = 1,
+  range_perception = 1,
+  costMove = 0.05,
   nThreads = 2,
   dispersal = 10.0,
-  mProb = 0.01,
+  mProb = 0.05,
   mSize = 0.01
 )
 
-# check movement data
-d = ecoevomove1::get_move_data(a)
+d = ecoevomove1::get_trait_data(a)
 
-ggplot(d[id == 5])+
-  geom_path(
-    aes(x, y)
-  )+
-  coord_equal()
+ggplot(d[gen %in% c(min(gen), max(gen))])+
+  geom_histogram(
+    aes(moved, col = as.factor(gen)),
+    alpha = 0.2
+  )
 
-d = a@trait_data
+ggplot(d[gen %in% c(min(gen), max(gen))])+
+  geom_histogram(
+    aes(mu, col = as.factor(gen)),
+    alpha = 0.2
+  )
+
+ggplot(d[gen %in% c(min(gen), max(gen))])+
+  geom_histogram(
+    aes(kappa, col = as.factor(gen)),
+    alpha = 0.2
+  )
 
 ggplot(d)+
+  geom_bin_2d(
+    aes(
+      gen, mu
+    ),
+    binwidth = c(1, 0.01)
+  )+
+  scale_y_log10()+
+  scale_fill_viridis_c(
+    option = "A",
+    direction = -1
+  )+
+  coord_cartesian(
+    # ylim = c(1e-2, NA)
+  )
+
+ggplot(d[gen %in% c(max(gen))])+
   annotate(
     geom = "point",
     x = 0.5, y = 0.1,
     col = "red"
   )+
   geom_jitter(
-    aes(gammaA, kappa)
+    aes(mu, kappa, col = gen)
   )+
   labs(
-    x = "alpha", y = "kappa"
+    x = "mu", y = "kappa"
   )
 
-ggplot(d)+
+ggplot(d[gen %in% c(max(gen))])+
   geom_jitter(
-    aes(gammaA, intake)
+    aes(mu, energy)
   )
 
-b = ecoevomove1::make_network(a, 1)
+ggplot(d[gen %in% c(max(gen))])+
+  geom_jitter(
+    aes(kappa, intake)
+  )
+
+b = ecoevomove1::make_network(, 12)
 
 # ecoevomove1::
-plot_network(b, kappa)+
+plot_network(b, gammaA)+
   scale_fill_viridis_c(
     direction = -1
     # limits = c(1e-3, 10)
