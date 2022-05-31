@@ -167,13 +167,7 @@ std::cauchy_distribution<float> noise_cauchy(0.f, 0.001f);
 
 /// function to wrap location given a maximum size
 float wrapLoc(float l, float maxl) {
-    if(l > maxl) {
-        return (l - maxl);
-    } else if(l < 0.f) {
-        return(maxl + l);
-    } else {
-        return l;
-    }
+    return std::fabs(std::fmod(l, maxl));
 }
 
 // function to move after drawing step lengths from a distribution
