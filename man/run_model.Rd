@@ -14,8 +14,7 @@ run_model(
   regen_time,
   tmax,
   genmax,
-  paramGammaA,
-  paramGammaB,
+  paramMu,
   paramKappa,
   range_perception,
   costMove,
@@ -45,10 +44,7 @@ run_model(
 
 \item{genmax}{The maximum number of generations per simulation.}
 
-\item{paramGammaA}{Alpha parameter for a step length distribution
-used to draw steps for agent movement.}
-
-\item{paramGammaB}{Beta parameter for a step length distribution
+\item{paramMu}{Mu parameter for an exponential distribution
 used to draw steps for agent movement.}
 
 \item{paramKappa}{Concentration parameter of a von Mises distribution from

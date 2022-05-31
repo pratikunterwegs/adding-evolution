@@ -12,7 +12,7 @@ Defines the \code{simulation_output} class.
 \describe{
 \item{\code{parameters}}{list.}
 
-\item{\code{trait_data}}{data.frame.}
+\item{\code{trait_data}}{list.}
 
 \item{\code{edge_list}}{data.frame.}
 
