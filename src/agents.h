@@ -80,6 +80,12 @@ public:
     // movement distances
     std::vector<float> moved;
 
+    // constant parameters from de Jager et al. 2011 Science
+    // these determine the probabilities of moving
+    const float a = 0.63f;
+    const float b = 1.26f;
+    const float c = 1.05f;
+
     // network object
     Network pbsn;
 
@@ -98,8 +104,7 @@ public:
         const float xloc, const float yloc
     );
     
-    std::pair<int, int > countAgents (
-        const float xloc, const float yloc);
+    float countAgents (const float xloc, const float yloc, const float range);
     
     // functions to move and forage on a landscape
     void move_random(const Resources &food);
