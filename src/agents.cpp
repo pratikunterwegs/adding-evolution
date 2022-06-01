@@ -195,26 +195,35 @@ float Population::countAgents (const float xloc, const float yloc, const float r
 void Population::move_random(const Resources &food) {
     
     for (int i = 0; i < nAgents; ++i) {
-        // set up distributions --- this is very costly but oh well
-        // there are more efficient ways but this will do for now.
-        float distance = static_cast<float>(gsl_ran_exponential(r, paramMu[i]));
+        // first count agents in range 1 (short range, this is perception range)
+        // nomenclature per de Jager et al. 2011 Science.
+        float D1 = countAgents(coordX[i], coordY[i], range_perception);
+        float D2 = countAgents(coordX[i], coordY[i], range_perception * 3.f);
 
-        // agent moves drawing from gamma distr
-        // float distance = distanceSearch(rng);
-        float angle = vonMisesAngle(paramKappa[i]);
+        float p_move = (a - (b * D1) + (c * D2));
 
-        float t1_ = static_cast<float>(cos(angle));
-        float t2_ = static_cast<float>(sin(angle));
+        // move if p_move is satisfied
+        if(gsl_ran_bernoulli(r, p_move) == 1) {
+            // there are more efficient ways but this will do for now.
+            float distance = static_cast<float>(gsl_ran_exponential(r, paramMu[i]));
 
-        coordX[i] = coordX[i] + (distance * t1_);
-        coordY[i] = coordY[i] + (distance * t2_);
+            // agent moves drawing from gamma distr
+            // float distance = distanceSearch(rng);
+            float angle = vonMisesAngle(paramKappa[i]);
 
-        coordX[i] = wrapLoc(coordX[i], food.dSize);
-        coordY[i] = wrapLoc(coordY[i], food.dSize);
+            float t1_ = static_cast<float>(cos(angle));
+            float t2_ = static_cast<float>(sin(angle));
 
-        // movement and cost of movement
-        moved[i] += distance;
-        energy[i] -= (distance * costMove);
+            coordX[i] = coordX[i] + (distance * t1_);
+            coordY[i] = coordY[i] + (distance * t2_);
+
+            coordX[i] = wrapLoc(coordX[i], food.dSize);
+            coordY[i] = wrapLoc(coordY[i], food.dSize);
+
+            // movement and cost of movement
+            moved[i] += distance;
+            energy[i] -= (distance * costMove);
+        }
     }
 }
 
