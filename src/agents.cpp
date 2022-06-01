@@ -170,6 +170,26 @@ float wrapLoc(float l, float maxl) {
     return std::fabs(std::fmod(l, maxl));
 }
 
+// general function for agents within distance
+float Population::countAgents (const float xloc, const float yloc, const float range) {
+    
+    int ag_here = 0;
+    std::vector<value> near_agents;
+    // query for a simple box
+    agentRtree.query(bgi::satisfies([&](value const& v) {
+        return bg::distance(v.first, point(xloc, yloc)) < range;}),
+        std::back_inserter(near_agents));
+
+    BOOST_FOREACH(value const& v, near_agents) {
+        
+        ag_here++;
+    }
+    near_agents.clear();
+    // first element is number of near entities
+    // second is the identity of entities
+    return static_cast<float>(ag_here);
+}
+
 // function to move after drawing step lengths from a distribution
 // and also turning angles
 void Population::move_random(const Resources &food) {
