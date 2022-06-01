@@ -56,8 +56,8 @@ Rcpp::List simulation::do_simulation_evo() {
 
             // foraging -- split into parallelised picking
             // and non-parallel exploitation
-            pop.pickForageItem(food, nThreads);
-            pop.doForage(food);
+            // pop.pickForageItem(food, nThreads);
+            // pop.doForage(food);
 
             // count associations
             pop.countAssoc(nThreads);
