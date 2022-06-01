@@ -201,11 +201,12 @@ void Population::move_random(const Resources &food) {
         float D2 = countAgents(coordX[i], coordY[i], range_perception * 3.f);
 
         float p_move = (a - (b * D1) + (c * D2));
+        float distance = 0.f;
 
         // move if p_move is satisfied
         if(gsl_ran_bernoulli(r, p_move) == 1) {
             // there are more efficient ways but this will do for now.
-            float distance = static_cast<float>(gsl_ran_exponential(r, paramMu[i]));
+            distance = static_cast<float>(gsl_ran_exponential(r, paramMu[i]));
 
             // agent moves drawing from gamma distr
             // float distance = distanceSearch(rng);
@@ -222,8 +223,12 @@ void Population::move_random(const Resources &food) {
 
             // movement and cost of movement
             moved[i] += distance;
-            energy[i] -= (distance * costMove);
         }
+        // energy is given by survival {(D1) * fecundity (1 / D2)} - movement cost
+        // this is very crude but may be a sufficient approximation of de Jager
+        // who did not really consider how to transform ecological outcomes
+        // into energy and hence fitness
+        energy[i] += (((D1) * (1.f / D2))  - (distance * costMove));
     }
 }
 
