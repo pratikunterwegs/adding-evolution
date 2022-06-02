@@ -359,6 +359,7 @@ void Population::Reproduce(const Resources food,
 
         tmp_gammaA[a] = paramMu[parent_id];
         tmp_kappa[a] = paramKappa[parent_id];
+        tmp_pmove[a] = tmp_pmove[parent_id];
 
         // inherit positions from parent
         coord_x_2[a] = coordX[parent_id] + sprout(rng);
@@ -388,17 +389,18 @@ void Population::Reproduce(const Resources food,
         if(mutation_happens(rng)) {
             tmp_gammaA[a] = tmp_gammaA[a] + mutation_size(rng);
             
-            if(tmp_gammaA[a] < 0.f) tmp_gammaA[a] = 0.01f;
+            if(tmp_gammaA[a] < 0.001f) tmp_gammaA[a] = 0.001f;
         }
         if(mutation_happens(rng)) {
             tmp_kappa[a] = tmp_kappa[a] + mutation_size(rng);
             
-            if(tmp_kappa[a] < 0.f) tmp_kappa[a] = 0.01f;
+            if(tmp_kappa[a] < 0.001f) tmp_kappa[a] = 0.001f;
         }
         if(mutation_happens(rng)) {
             tmp_pmove[a] = tmp_pmove[a] + mutation_size(rng);
             
-            if(tmp_pmove[a] < 0.f) tmp_pmove[a] = 0.01f;
+            if(tmp_pmove[a] < 0.f) tmp_pmove[a] = 0.001f;
+            if(tmp_pmove[a] > 1.f) tmp_pmove[a] = 0.999f;
         }
     }
     
