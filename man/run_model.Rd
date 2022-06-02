@@ -16,6 +16,7 @@ run_model(
   genmax,
   paramMu,
   paramKappa,
+  pMove,
   range_perception,
   costMove,
   nThreads,
@@ -49,6 +50,8 @@ used to draw steps for agent movement.}
 
 \item{paramKappa}{Concentration parameter of a von Mises distribution from
 which turning angles are drawn in radians, for ballistic movement.}
+
+\item{pMove}{Initial value of the heritable probability of moving.}
 
 \item{range_perception}{The range at which agents detect items.}
 
