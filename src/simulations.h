@@ -18,6 +18,7 @@ public:
                 const int genmax,
                 const float paramMu,
                 const float paramKappa,
+                const float pMove,
                 const float range_perception,
                 const float costMove,
                 const int nThreads,
@@ -27,6 +28,7 @@ public:
         // population, food, and data structures
         pop (popsize, paramMu,
             paramKappa,
+            pMove,
             range_perception,
             costMove,
             scenario

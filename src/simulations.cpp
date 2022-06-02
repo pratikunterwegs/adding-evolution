@@ -164,6 +164,7 @@ Rcpp::List simulation::do_simulation_eco() {
 //' used to draw steps for agent movement.
 //' @param paramKappa Concentration parameter of a von Mises distribution from
 //' which turning angles are drawn in radians, for ballistic movement.
+//' @param pMove Initial value of the heritable probability of moving.
 //' @param range_perception The range at which agents detect items.
 //' @param costMove The energetic cost per distance moved.
 //' @param nThreads How many threads to parallelise over. Set to 1 to run on
@@ -191,6 +192,7 @@ S4 run_model(const int scenario,
                 const int genmax,
                 const float paramMu,
                 const float paramKappa,
+                const float pMove,
                 const float range_perception,
                 const float costMove,
                 const int nThreads,
@@ -202,7 +204,7 @@ S4 run_model(const int scenario,
     simulation this_sim(scenario, popsize, nItems,
         landsize, nClusters, clusterSpread, regen_time, tmax,
         genmax, 
-        paramMu, paramKappa,
+        paramMu, paramKappa, pMove,
         range_perception, costMove, 
         nThreads, dispersal,
         mProb, mSize

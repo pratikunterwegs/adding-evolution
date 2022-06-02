@@ -8,6 +8,7 @@ Rcpp::DataFrame Population::returnPopData() {
         Named("energy") = energy,
         Named("mu") = paramMu,
         Named("kappa") = paramKappa,
+        Named("pmove") = pMove,
         Named("x") = initX,
         Named("y") = initY,
         Named("xn") = coordX,
