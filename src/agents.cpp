@@ -176,25 +176,28 @@ void Population::move_random(const Resources &food) {
     
     for (int i = 0; i < nAgents; ++i) {
         // set up distributions --- this is very costly but oh well
-        // there are more efficient ways but this will do for now.
-        float distance = static_cast<float>(gsl_ran_exponential(r, paramMu[i]));
 
-        // agent moves drawing from gamma distr
-        // float distance = distanceSearch(rng);
-        float angle = vonMisesAngle(paramKappa[i]);
+        if(gsl_ran_bernoulli(r, pMove[i]) == 1) {
+            // there are more efficient ways but this will do for now.
+            float distance = static_cast<float>(gsl_ran_exponential(r, paramMu[i]));
 
-        float t1_ = static_cast<float>(cos(angle));
-        float t2_ = static_cast<float>(sin(angle));
+            // agent moves drawing from gamma distr
+            // float distance = distanceSearch(rng);
+            float angle = vonMisesAngle(paramKappa[i]);
 
-        coordX[i] = coordX[i] + (distance * t1_);
-        coordY[i] = coordY[i] + (distance * t2_);
+            float t1_ = static_cast<float>(cos(angle));
+            float t2_ = static_cast<float>(sin(angle));
 
-        coordX[i] = wrapLoc(coordX[i], food.dSize);
-        coordY[i] = wrapLoc(coordY[i], food.dSize);
+            coordX[i] = coordX[i] + (distance * t1_);
+            coordY[i] = coordY[i] + (distance * t2_);
 
-        // movement and cost of movement
-        moved[i] += distance;
-        energy[i] -= (distance * costMove);
+            coordX[i] = wrapLoc(coordX[i], food.dSize);
+            coordY[i] = wrapLoc(coordY[i], food.dSize);
+
+            // movement and cost of movement
+            moved[i] += distance;
+            energy[i] -= (distance * costMove);
+        }
     }
 }
 
