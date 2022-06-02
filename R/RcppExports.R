@@ -32,6 +32,7 @@ get_test_landscape <- function(nItems, landsize, nClusters, clusterSpread, regen
 #' used to draw steps for agent movement.
 #' @param paramKappa Concentration parameter of a von Mises distribution from
 #' which turning angles are drawn in radians, for ballistic movement.
+#' @param pMove Initial value of the heritable probability of moving.
 #' @param range_perception The range at which agents detect items.
 #' @param costMove The energetic cost per distance moved.
 #' @param nThreads How many threads to parallelise over. Set to 1 to run on
@@ -47,7 +48,7 @@ get_test_landscape <- function(nItems, landsize, nClusters, clusterSpread, regen
 #' @param mSize Controls the mutational step size, and represents the scale
 #' parameter of a Cauchy distribution. 
 #' @return An S4 class, `simulation_output`, with simulation outcomes.
-run_model <- function(scenario, popsize, nItems, landsize, nClusters, clusterSpread, regen_time, tmax, genmax, paramMu, paramKappa, range_perception, costMove, nThreads, dispersal, mProb, mSize) {
-    .Call(`_ecoevomove1_run_model`, scenario, popsize, nItems, landsize, nClusters, clusterSpread, regen_time, tmax, genmax, paramMu, paramKappa, range_perception, costMove, nThreads, dispersal, mProb, mSize)
+run_model <- function(scenario, popsize, nItems, landsize, nClusters, clusterSpread, regen_time, tmax, genmax, paramMu, paramKappa, pMove, range_perception, costMove, nThreads, dispersal, mProb, mSize) {
+    .Call(`_ecoevomove1_run_model`, scenario, popsize, nItems, landsize, nClusters, clusterSpread, regen_time, tmax, genmax, paramMu, paramKappa, pMove, range_perception, costMove, nThreads, dispersal, mProb, mSize)
 }
 
