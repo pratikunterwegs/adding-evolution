@@ -339,6 +339,7 @@ void Population::Reproduce(const Resources food,
     // get parent trait based on weighted lottery
     std::vector<float> tmp_gammaA (nAgents, 0.5f);
     std::vector<float> tmp_kappa (nAgents, 0.5f);
+    std::vector<float> tmp_pmove (nAgents, 0.5f);
     
     // reset associations
     associations = std::vector<int> (nAgents, 0);
@@ -387,12 +388,17 @@ void Population::Reproduce(const Resources food,
         if(mutation_happens(rng)) {
             tmp_gammaA[a] = tmp_gammaA[a] + mutation_size(rng);
             
-            if(tmp_gammaA[a] < 0.f) tmp_gammaA[a] = 0.00001f;
+            if(tmp_gammaA[a] < 0.f) tmp_gammaA[a] = 0.01f;
         }
         if(mutation_happens(rng)) {
             tmp_kappa[a] = tmp_kappa[a] + mutation_size(rng);
             
-            if(tmp_kappa[a] < 0.f) tmp_kappa[a] = 0.00001f;
+            if(tmp_kappa[a] < 0.f) tmp_kappa[a] = 0.01f;
+        }
+        if(mutation_happens(rng)) {
+            tmp_pmove[a] = tmp_pmove[a] + mutation_size(rng);
+            
+            if(tmp_pmove[a] < 0.f) tmp_pmove[a] = 0.01f;
         }
     }
     
@@ -402,6 +408,9 @@ void Population::Reproduce(const Resources food,
 
     std::swap(paramKappa, tmp_kappa);
     tmp_kappa.clear();
+
+    std::swap(pMove, tmp_pmove);
+    tmp_pmove.clear();
     
     // swap energy
     std::vector<float> tmpEnergy (nAgents, 0.001f);
