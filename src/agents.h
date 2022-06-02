@@ -18,6 +18,7 @@ public:
     Population(const int popsize, 
         const float paramMu,
         const float paramKappa,
+        const float pMove,
         const float range_perception,
         const float costMove,
         const int scenario
@@ -34,6 +35,7 @@ public:
         // parameters for the initial random walk
         paramMu(popsize, paramMu),
         paramKappa(popsize, paramKappa),
+        pMove(popsize, pMove),
 
         range_perception(range_perception),
         costMove(costMove),
@@ -65,6 +67,7 @@ public:
     
     std::vector<float> paramMu;
     std::vector<float> paramKappa;
+    std::vector<float> pMove;
 
     const float range_perception;
     const float costMove;
