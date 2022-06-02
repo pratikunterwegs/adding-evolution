@@ -12,10 +12,10 @@ library(ggplot2)
 
 # test landscapes
 l = ecoevomove1::get_test_landscape(
-  nItems = 450,
+  nItems = 1800,
   landsize = 30,
-  nClusters = 30,
-  clusterSpread = 0.5,
+  nClusters = 180,
+  clusterSpread = 0.1,
   regen_time = 100
 )
 
@@ -27,59 +27,42 @@ l |>
     coord_equal()
 
 # test gamm distributions
-mu = 1
+mu = 0.01
 rexp(n = 1000, rate = 1/(mu)) |>
   hist()
 
-rotations::rvmises(n = 1000, kappa = 1) |>
+rotations::rvmises(n = 1000, kappa = 0.1) |>
   # as.vector() |>
   hist()
 
 # test case 0
 a = ecoevomove1::run_model(
   scenario = 1,
-  popsize = 250,
-  nItems = 450,
+  popsize = 1000,
+  nItems = 1800,
   landsize = 30,
-  nClusters = 30,
+  nClusters = 90,
   clusterSpread = 0.5,
-  regen_time = 10,
-  tmax = 400,
-  genmax = 500,
-  paramMu = 1,
-  paramKappa = 1,
+  regen_time = 100,
+  tmax = 100,
+  genmax = 200,
+  paramMu = 0.1,
+  paramKappa = 0.1,
+  pMove = 0.1,
   range_perception = 1,
   costMove = 0.05,
   nThreads = 2,
-  dispersal = 10.0,
-  mProb = 0.05,
-  mSize = 0.01
+  dispersal = 2,
+  mProb = 0.01,
+  mSize = 0.005
 )
 
 d = ecoevomove1::get_trait_data(a)
 
-ggplot(d[gen %in% c(min(gen), max(gen))])+
-  geom_histogram(
-    aes(moved, col = as.factor(gen)),
-    alpha = 0.2
-  )
-
-ggplot(d[gen %in% c(min(gen), max(gen))])+
-  geom_histogram(
-    aes(mu, col = as.factor(gen)),
-    alpha = 0.2
-  )
-
-ggplot(d[gen %in% c(min(gen), max(gen))])+
-  geom_histogram(
-    aes(kappa, col = as.factor(gen)),
-    alpha = 0.2
-  )
-
 ggplot(d)+
   geom_bin_2d(
     aes(
-      gen, mu
+      gen, kappa
     ),
     binwidth = c(1, 0.01)
   )+
@@ -90,6 +73,21 @@ ggplot(d)+
   )+
   coord_cartesian(
     # ylim = c(1e-2, NA)
+  )
+
+ggplot(d)+
+  geom_bin2d(
+    aes(
+      gen, moved
+    ),
+    binwidth = c(1, 1)
+  )+
+  coord_cartesian(
+    ylim = c(0, NA)
+  )+
+  scale_fill_viridis_c(
+    option = "A",
+    direction = -1
   )
 
 ggplot(d[gen %in% c(max(gen))])+
